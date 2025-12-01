@@ -4,7 +4,7 @@
       <div class="col">
         <nav>
           <nav>
-            <router-link to="/">Home</router-link> |
+            <router-link to="/">Home</router-link> 
           </nav>
         </nav>
       </div>
