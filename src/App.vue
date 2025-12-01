@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col">
         <nav>
-          <router-link to="/">Home</router-link> |
+          <router-link to="/">Home</router-link>
 
         </nav>
       </div>
