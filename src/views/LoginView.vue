@@ -30,6 +30,7 @@
 
 <script>
 import LoginService from "@/service/LoginService";
+import NavigationService from "@/service/NavigationService";
 
 export default {
   name: 'LoginView',
@@ -55,20 +56,28 @@ export default {
 
   methods: {
 
+    handleLoginResponse(response) {
+      this.loginResponse = response.data;
+      sessionStorage.setItem('userId', this.loginResponse.userId)
+      sessionStorage.setItem('roleName', this.loginResponse.roleName)
+
+      // todo> andmed session storagesse
+      // todo> navigeeeri j'rgmisele lehele
+    },
+
     executeLogin() {
       this.startSpinner()
       LoginService.sendGetLoginRequest(this.username, this.password)
-          .then(response => this.loginResponse(response.data))
+          .then(response => this.handleLoginResponse(response))
           .catch(error => this.errorResponse = error.response.data)
-          .finally()
+          .finally(() => this.isFetchingData=false)
+          NavigationService.navigateToHomeView()
 
-      // todo> andmed loginResponse sisse
-      // todo> andmed session storagesse
-      // todo> navigeeeri j'rgmisele lehele
 
       // todo> catch (kuva alerti kus vaja, v]i naeigeeri UPS mdiagi l'ks valesti
 
     },
+
 
     startSpinner() {
       this.isFetchingData = true
