@@ -19,7 +19,8 @@ const routes = [
         name: 'errorRoute',
         component: errorView
 
-    }
+    },
+
 
 ]
 
