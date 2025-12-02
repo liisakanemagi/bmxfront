@@ -39,6 +39,7 @@
   import LoginService from "@/services/LoginService";
   import {start} from "@popperjs/core";
   import errorView from "@/views/ErrorView.vue";
+  import NavigationService from "@/services/NavigationService";
 
   export default {
     name: 'LoginView',
@@ -64,18 +65,32 @@
     methods: {
 
 
-      executeLogin() {
-        this.startSpinner()
-        LoginService.sendGetLoginRequest(this.username, this.password)
-            .then(response => this.loginResponse(response.data))
-            .catch(error => this.errorResponse = error.response.data)
-            .finally()
+      handleLoginResponse(response) {
+        this.loginResponse = response.data;
+        sessionStorage.setItem('userId', this.loginResponse.userId)
+        sessionStorage.setItem('roleName', this.loginResponse.roleName)
 
 
       },
+
+      executeLogin() {
+        this.startSpinner()
+        LoginService.sendGetLoginRequest(this.username, this.password)
+            .then(response => this.handleLoginResponse(response))
+            .catch(error => this.errorResponse = error.response.data)
+            .finally(() => this.isFetchingData=false)
+
+        NavigationService.navigateToHomeView()
+
+      },
+
+
+
       startSpinner(){
         this.isFetchingData = true
-      }
+      },
+
+
 
     }
 

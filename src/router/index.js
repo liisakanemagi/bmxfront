@@ -6,7 +6,7 @@ import errorView from "@/views/ErrorView.vue";
 const routes = [
   {
     path: '/',
-    name: 'home',
+    name: 'homeRoute',
     component: HomeView
   },
   {
@@ -16,7 +16,7 @@ const routes = [
   },
     {
         path:'/error',
-        name: 'erroRoute',
+        name: 'errorRoute',
         component: errorView
 
     }
