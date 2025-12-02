@@ -1,4 +1,4 @@
-@export default {
+export default {
 
     isAdmin(){
        return  sessionStorage.getItem('roleName')==='admin'
