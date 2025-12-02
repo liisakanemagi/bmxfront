@@ -1,6 +1,12 @@
 <template>
   <div class="container text-center">
-    <div class="row justify-content-center mt-5">
+
+    <div class="row justify-content-center">
+      <div class ="col-6">
+      <AlertDanger :alert-message = 'alertMessage' @event-alert-box-closed ='resetAlertMessage' />
+      </div>
+    </div>
+    <div class="row justify-content-center mt-3">
       <div class="col col-2">
         <div class="form-floating mb-3"></div>
         <div class="input-group">
@@ -18,7 +24,7 @@
     </div>
     <div class="row justify-content-center mt-3">
       <div class="col-2">
-        <button @click="executeLogin" type="button" class="btn btn-secondary btn-sm" :disabled="isFetchingData">
+        <button @click="processLogin" type="button" class="btn btn-secondary btn-sm" :disabled="isFetchingData">
           <span v-if="isFetchingData" class="spinner-border spinner-border-sm btn-sm" aria-hidden="true"></span>
           <span class="btn btn-secondary btn-sm">Logi sisse</span>
         </button>
@@ -31,9 +37,11 @@
 <script>
 import LoginService from "@/service/LoginService";
 import NavigationService from "@/service/NavigationService";
+import AlertDanger from "@/components/AlertDanger.vue";
 
 export default {
   name: 'LoginView',
+  components: {AlertDanger},
   props: {},
 
   data() {
@@ -41,6 +49,7 @@ export default {
       isFetchingData: false,
       username: '',
       password: '',
+      alertMessage:'',
 
       loginResponse: {
         userId: 0,
@@ -56,33 +65,55 @@ export default {
 
   methods: {
 
-    handleLoginResponse(response) {
-      this.loginResponse = response.data;
-      sessionStorage.setItem('userId', this.loginResponse.userId)
-      sessionStorage.setItem('roleName', this.loginResponse.roleName)
+    processLogin(){
+       if (this.username !=='' && this.password !==''){
+        this.executeLogin();
+      } else {
+        this.displayIncorrectInputAlert();
+      }
 
-      // todo> andmed session storagesse
-      // todo> navigeeeri j'rgmisele lehele
+    },
+
+    displayIncorrectInputAlert(){
+      this.alertMessage = ' Täida kõik väljad'
     },
 
     executeLogin() {
       this.startSpinner()
       LoginService.sendGetLoginRequest(this.username, this.password)
           .then(response => this.handleLoginResponse(response))
-          .catch(error => this.errorResponse = error.response.data)
+          .catch(error => this.handleLoginError(error))
           .finally(() => this.isFetchingData=false)
-          NavigationService.navigateToHomeView()
-
-
-      // todo> catch (kuva alerti kus vaja, v]i naeigeeri UPS mdiagi l'ks valesti
 
     },
 
+    handleLoginResponse(response) {
+      this.loginResponse = response.data;
+      sessionStorage.setItem('userId', this.loginResponse.userId)
+      sessionStorage.setItem('roleName', this.loginResponse.roleName)
+      NavigationService.navigateToHomeView()
+    },
 
     startSpinner() {
       this.isFetchingData = true
     },
 
+    handleLoginError(error){
+      this.errorResponse = error.response.data
+     if (this.incorrectCredentialsInput(error)) {
+       this.alertMessage = this.errorResponse.message
+     } else {
+       NavigationService.navigateToErrorView()
+     }
+   },
+
+    incorrectCredentialsInput(error) {
+      return error.response.status === 403 && this.errorResponse.errorCode === 111;
+    },
+
+    resetAlertMessage(){
+      this.alertMessage = ''
+    }
 
   }
 }
