@@ -11,5 +11,8 @@ export default {
     },
     navigateToLoginView() {
         router.push({name:'loginRoute'})
-    }
+    },
+    navigateToLocationView() {
+        router.push({name: 'locationRoute'})
+    },
 }

@@ -6,6 +6,8 @@
   />
   <nav>
     <router-link to="/">Home</router-link>
+    <router-link to="/location">Sõidukohad</router-link>
+
     <template v-if="isLoggedIn">
       <button @click="startLogOutProcess" type="button" class="btn btn-secondary btn-sm ms-3">Logi valja</button>
     </template>
