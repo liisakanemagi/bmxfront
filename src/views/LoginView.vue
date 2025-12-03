@@ -28,6 +28,9 @@
           <span v-if="isFetchingData" class="spinner-border spinner-border-sm btn-sm" aria-hidden="true"></span>
           <span class="btn btn-secondary btn-sm">Logi sisse</span>
         </button>
+        <div class="mt-3">
+          <button @click="navigateToRegisterView" type="button" class="btn btn-link btn-sm">Registreeri</button>
+        </div>
       </div>
     </div>
   </div>
@@ -35,8 +38,8 @@
 </template>
 
 <script>
-import LoginService from "@/service/LoginService";
-import NavigationService from "@/service/NavigationService";
+import LoginService from "@/services/LoginService";
+import NavigationService from "@/services/NavigationService";
 import AlertDanger from "@/components/AlertDanger.vue";
 
 export default {
@@ -65,17 +68,16 @@ export default {
 
   methods: {
 
-    processLogin(){
-       if (this.username !=='' && this.password !==''){
+    processLogin() {
+      if (this.username !== '' && this.password !== '') {
         this.executeLogin();
       } else {
         this.displayIncorrectInputAlert();
       }
-
     },
 
-    displayIncorrectInputAlert(){
-      this.alertMessage = ' Täida kõik väljad'
+    displayIncorrectInputAlert() {
+      this.alertMessage = 'Täida kõik väljad'
     },
 
     executeLogin() {
@@ -83,7 +85,7 @@ export default {
       LoginService.sendGetLoginRequest(this.username, this.password)
           .then(response => this.handleLoginResponse(response))
           .catch(error => this.handleLoginError(error))
-          .finally(() => this.isFetchingData=false)
+          .finally(() => this.isFetchingData = false)
 
     },
 
@@ -95,7 +97,7 @@ export default {
       NavigationService.navigateToHomeView()
     },
 
-    updateNavMenuUserIsLoggedIn(){
+    updateNavMenuUserIsLoggedIn() {
       this.$emit('event-user-logged-in')
     },
 
@@ -103,23 +105,26 @@ export default {
       this.isFetchingData = true
     },
 
-    handleLoginError(error){
+    handleLoginError(error) {
       this.errorResponse = error.response.data
-     if (this.incorrectCredentialsInput(error)) {
-       this.alertMessage = this.errorResponse.message
-     } else {
-       NavigationService.navigateToErrorView()
-     }
-   },
+      if (this.incorrectCredentialsInput(error)) {
+        this.alertMessage = this.errorResponse.message
+      } else {
+        NavigationService.navigateToErrorView()
+      }
+    },
 
     incorrectCredentialsInput(error) {
       return error.response.status === 403 && this.errorResponse.errorCode === 111;
     },
 
-    resetAlertMessage(){
+    resetAlertMessage() {
       this.alertMessage = ''
-    }
+    },
 
+    navigateToRegisterView() {
+      NavigationService.navigateToRegisterView()
+    },
   }
 }
 </script>
