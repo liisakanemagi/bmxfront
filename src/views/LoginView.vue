@@ -1,4 +1,4 @@
-<template>
+<template xmlns="http://www.w3.org/1999/html">
   <div class="container text-center">
 
     <div class="row justify-content-center">
@@ -29,14 +29,16 @@
           <span class="btn btn-secondary btn-sm">Logi sisse</span>
         </button>
       </div>
+      <div class="mt-3">
+        <button @click="navigateToRegisterView" type="button" class="btn btn-link btn-sm">Registreeri</button>
+      </div>
     </div>
   </div>
-
 </template>
 
 <script>
-import LoginService from "@/service/LoginService";
-import NavigationService from "@/service/NavigationService";
+import LoginService from "@/services/LoginService";
+import NavigationService from "@/services/NavigationService";
 import AlertDanger from "@/components/AlertDanger.vue";
 
 export default {
@@ -118,7 +120,10 @@ export default {
 
     resetAlertMessage(){
       this.alertMessage = ''
-    }
+    },
+    navigateToRegisterView() {
+      NavigationService.navigateToRegisterView()
+    },
 
   }
 }

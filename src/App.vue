@@ -8,6 +8,7 @@
     <router-link to="/">Home</router-link>
     <router-link to="/location">Sõidukohad</router-link>
 
+
     <template v-if="isLoggedIn">
       <button @click="startLogOutProcess" type="button" class="btn btn-secondary btn-sm ms-3">Logi valja</button>
     </template>
@@ -20,8 +21,8 @@
 </template>
 <script>
 
-import SessionStorageService from "@/service/SessionStorageService";
-import NavigationService from "@/service/NavigationService";
+import SessionStorageService from "@/services/SessionStorageService";
+import NavigationService from "@/services/NavigationService";
 import LogOutModal from "@/components/modal/LogOutModal.vue";
 
 export default {

@@ -13,6 +13,9 @@ export default {
         router.push({name:'loginRoute'})
     },
     navigateToLocationView() {
-        router.push({name: 'locationRoute'})
+        router.push({name:'locationRoute'})
     },
+    navigateToRegisterView(){
+        router.push({name:'registerRoute'})
+    }
 }
