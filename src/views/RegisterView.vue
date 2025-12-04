@@ -30,14 +30,16 @@
     <div class="row justify-content-center ">
       <div class="form-floating "></div>
       <div class="col col-2">
-        <div class="form-floating mb-3"></div>
+        <div class="form-floating mb-3">
         <input v-model="userInfo.password" type="password" class="form-control" placeholder="Parool">
+        </div>
       </div>
     </div>
     <div class="row justify-content-center">
       <div class="row col-2">
-        <div class="form-floating mb-3"></div>
+        <div class="form-floating mb-3">
         <input v-model="passwordRetype" type="password" class="form-control" placeholder="Korda parooli">
+        </div>
       </div>
     </div>
     <div class="row justify-content-center mt-3">
