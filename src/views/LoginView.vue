@@ -69,11 +69,15 @@ export default {
   methods: {
 
     processLogin() {
-      if (this.username !== '' && this.password !== '') {
+      if (this.allFieldsHaveCorrectInput()) {
         this.executeLogin();
       } else {
         this.displayIncorrectInputAlert();
       }
+    },
+
+    allFieldsHaveCorrectInput() {
+      return this.username !== '' && this.password !== '';
     },
 
     executeLogin() {
@@ -88,10 +92,6 @@ export default {
       this.isFetchingData = true
     },
 
-    displayIncorrectInputAlert() {
-      this.alertMessage = 'Täida kõik väljad'
-    },
-
     handleLoginResponse(response) {
       this.loginResponse = response.data;
       this.setSessionStorageItems();
@@ -99,13 +99,13 @@ export default {
       NavigationService.navigateToHomeView()
     },
 
+    updateNavMenuUserIsLoggedIn() {
+      this.$emit('event-user-logged-in')
+    },
+
     setSessionStorageItems() {
       sessionStorage.setItem('userId', this.loginResponse.userId)
       sessionStorage.setItem('roleName', this.loginResponse.roleName)
-    },
-
-    updateNavMenuUserIsLoggedIn() {
-      this.$emit('event-user-logged-in')
     },
 
     handleLoginError(error) {
@@ -119,6 +119,10 @@ export default {
 
     incorrectCredentialsInput(error) {
       return error.response.status === 403 && this.errorResponse.errorCode === 111;
+    },
+
+    displayIncorrectInputAlert() {
+      this.alertMessage = 'Täida kõik väljad'
     },
 
     navigateToRegisterView() {

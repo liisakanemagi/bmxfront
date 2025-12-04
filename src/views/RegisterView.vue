@@ -86,15 +86,15 @@ export default {
   methods: {
 
     processRegister() {
-      if (this.userInfo.username !== '' && this.userInfo.password !== '' && this.userInfo.email !== '' && this.password2 !== '') {
+      if (this.allFieldsHaveCorrectInput()) {
         this.executeRegister();
       } else {
         this.displayIncorrectInputAlert();
       }
     },
 
-    displayIncorrectInputAlert() {
-      this.alertMessage = 'Täida kõik väljad'
+    allFieldsHaveCorrectInput() {
+      return this.userInfo.username !== '' && this.userInfo.password !== '' && this.userInfo.email !== '' && this.password2 !== '';
     },
 
     executeRegister() {
@@ -117,9 +117,6 @@ export default {
       this.isPostingData = true
     },
 
-    passwordsNotMatching() {
-      this.alertMessage = 'Sisestatud paroolid ei kattu'
-    },
 
     handleRegisterResponse() {
       this.successMessage = 'Uus kasuataja "' + this.userInfo.username + '" registreeritud!'
@@ -155,7 +152,15 @@ export default {
 
     userAlreadyExists(error) {
       return error.response.status === 403 && this.errorResponse.errorCode === 112;
-    }
+    },
+
+    passwordsNotMatching() {
+      this.alertMessage = 'Sisestatud paroolid ei kattu'
+    },
+
+    displayIncorrectInputAlert() {
+      this.alertMessage = 'Täida kõik väljad'
+    },
   }
 }
 </script>
