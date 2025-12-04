@@ -40,10 +40,11 @@
 import LoginService from "@/services/LoginService";
 import NavigationService from "@/services/NavigationService";
 import AlertDanger from "@/components/AlertDanger.vue";
+import AlertSuccess from "@/components/AlertSuccess.vue";
 
 export default {
   name: 'LoginView',
-  components: {AlertDanger},
+  components: {AlertSuccess, AlertDanger},
   props: {},
 
   data() {
@@ -52,6 +53,7 @@ export default {
       username: '',
       password: '',
       alertMessage:'',
+
 
       loginResponse: {
         userId: 0,
