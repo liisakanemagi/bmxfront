@@ -1,9 +1,9 @@
-<template xmlns="http://www.w3.org/1999/html">
+<template>
   <div class="container text-center">
 
     <div class="row justify-content-center">
       <div class="col-6">
-        <AlertDanger :alert-message='alertMessage' @event-alert-box-closed='resetAlertMessage'/>
+        <AlertError :alert-error-message='alertErrorMessage' @event-alert-box-closed='resetAlertMessage'/>
       </div>
     </div>
     <div class="row justify-content-center mt-3">
@@ -28,23 +28,23 @@
           <span v-if="isFetchingData" class="spinner-border spinner-border-sm btn-sm" aria-hidden="true"></span>
           <span class="btn btn-secondary btn-sm">Logi sisse</span>
         </button>
-      </div>
-      <div class="mt-3">
-        <button @click="navigateToRegisterView" type="button" class="btn btn-link btn-sm">Registreeri</button>
+        <div class="mt-3">
+          <button @click="navigateToRegisterView" type="button" class="btn btn-link btn-sm">Registreeri</button>
+        </div>
       </div>
     </div>
   </div>
+
 </template>
 
 <script>
 import LoginService from "@/services/LoginService";
 import NavigationService from "@/services/NavigationService";
-import AlertDanger from "@/components/AlertDanger.vue";
-import AlertSuccess from "@/components/AlertSuccess.vue";
+import AlertError from "@/components/AlertError.vue";
 
 export default {
   name: 'LoginView',
-  components: {AlertSuccess, AlertDanger},
+  components: {AlertError},
   props: {},
 
   data() {
@@ -52,8 +52,7 @@ export default {
       isFetchingData: false,
       username: '',
       password: '',
-      alertMessage: '',
-
+      alertErrorMessage: '',
 
       loginResponse: {
         userId: 0,
@@ -69,7 +68,7 @@ export default {
 
   methods: {
 
- processLogin() {
+    processLogin() {
       if (this.allFieldsHaveCorrectInput()) {
         this.executeLogin();
       } else {
@@ -81,14 +80,12 @@ export default {
       return this.username !== '' && this.password !== '';
     },
 
-
     executeLogin() {
       this.startSpinner()
       LoginService.sendGetLoginRequest(this.username, this.password)
           .then(response => this.handleLoginResponse(response))
           .catch(error => this.handleLoginError(error))
           .finally(() => this.isFetchingData = false)
-
     },
 
     startSpinner() {
@@ -97,8 +94,7 @@ export default {
 
     handleLoginResponse(response) {
       this.loginResponse = response.data;
-      sessionStorage.setItem('userId', this.loginResponse.userId)
-      sessionStorage.setItem('roleName', this.loginResponse.roleName)
+      this.setSessionStorageItems();
       this.updateNavMenuUserIsLoggedIn()
       NavigationService.navigateToHomeView()
     },
@@ -107,8 +103,9 @@ export default {
       this.$emit('event-user-logged-in')
     },
 
-    displayIncorrectInputAlert() {
-      this.alertMessage = ' Täida kõik väljad'
+    setSessionStorageItems() {
+      sessionStorage.setItem('userId', this.loginResponse.userId)
+      sessionStorage.setItem('roleName', this.loginResponse.roleName)
     },
 
     handleLoginError(error) {
@@ -124,13 +121,17 @@ export default {
       return error.response.status === 403 && this.errorResponse.errorCode === 111;
     },
 
-    resetAlertMessage() {
-      this.alertMessage = ''
+    displayIncorrectInputAlert() {
+      this.alertMessage = 'Täida kõik väljad'
     },
+
     navigateToRegisterView() {
       NavigationService.navigateToRegisterView()
     },
 
+    resetAlertMessage() {
+      this.alertMessage = ''
+    },
   }
 }
 </script>

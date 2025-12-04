@@ -10,14 +10,13 @@
 
 
     <template v-if="isLoggedIn">
-      <button @click="startLogOutProcess" type="button" class="btn btn-secondary btn-sm ms-3">Logi valja</button>
+      <button @click="startLogOutProcess" type="button" class="btn btn-secondary btn-sm ms-3">Logi välja</button>
     </template>
     <template v-else>
       <button @click="navigateToLoginView" type="button" class="btn btn-secondary btn-sm ms-3">Logi sisse /
         registreeri
       </button>
     </template>
-
   </nav>
   <router-view @event-user-logged-in="updateNavMenu"/>
 </template>
