@@ -3,7 +3,7 @@
 
     <div class="row justify-content-center">
       <div class="col-6">
-        <AlertDanger :alert-message='alertMessage' @event-alert-box-closed='resetAlertMessage'/>
+        <AlertError :alert-error-message='alertErrorMessage' @event-alert-box-closed='resetAlertMessage'/>
       </div>
     </div>
     <div class="row justify-content-center mt-3">
@@ -40,11 +40,11 @@
 <script>
 import LoginService from "@/services/LoginService";
 import NavigationService from "@/services/NavigationService";
-import AlertDanger from "@/components/AlertDanger.vue";
+import AlertError from "@/components/AlertError.vue";
 
 export default {
   name: 'LoginView',
-  components: {AlertDanger},
+  components: {AlertError},
   props: {},
 
   data() {
@@ -52,7 +52,7 @@ export default {
       isFetchingData: false,
       username: '',
       password: '',
-      alertMessage: '',
+      alertErrorMessage: '',
 
       loginResponse: {
         userId: 0,
