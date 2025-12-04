@@ -2,8 +2,8 @@
   <div class="container text-center">
 
     <div class="row justify-content-center">
-      <div class ="col-6">
-      <AlertDanger :alert-message = 'alertMessage' @event-alert-box-closed ='resetAlertMessage' />
+      <div class="col-6">
+        <AlertDanger :alert-message='alertMessage' @event-alert-box-closed='resetAlertMessage'/>
       </div>
     </div>
     <div class="row justify-content-center mt-3">
@@ -52,7 +52,7 @@ export default {
       isFetchingData: false,
       username: '',
       password: '',
-      alertMessage:'',
+      alertMessage: '',
 
 
       loginResponse: {
@@ -69,26 +69,30 @@ export default {
 
   methods: {
 
-    processLogin(){
-       if (this.username !=='' && this.password !==''){
+ processLogin() {
+      if (this.allFieldsHaveCorrectInput()) {
         this.executeLogin();
       } else {
         this.displayIncorrectInputAlert();
       }
-
     },
 
-    displayIncorrectInputAlert(){
-      this.alertMessage = ' Täida kõik väljad'
+    allFieldsHaveCorrectInput() {
+      return this.username !== '' && this.password !== '';
     },
+
 
     executeLogin() {
       this.startSpinner()
       LoginService.sendGetLoginRequest(this.username, this.password)
           .then(response => this.handleLoginResponse(response))
           .catch(error => this.handleLoginError(error))
-          .finally(() => this.isFetchingData=false)
+          .finally(() => this.isFetchingData = false)
 
+    },
+
+    startSpinner() {
+      this.isFetchingData = true
     },
 
     handleLoginResponse(response) {
@@ -99,28 +103,28 @@ export default {
       NavigationService.navigateToHomeView()
     },
 
-    updateNavMenuUserIsLoggedIn(){
+    updateNavMenuUserIsLoggedIn() {
       this.$emit('event-user-logged-in')
     },
 
-    startSpinner() {
-      this.isFetchingData = true
+    displayIncorrectInputAlert() {
+      this.alertMessage = ' Täida kõik väljad'
     },
 
-    handleLoginError(error){
+    handleLoginError(error) {
       this.errorResponse = error.response.data
-     if (this.incorrectCredentialsInput(error)) {
-       this.alertMessage = this.errorResponse.message
-     } else {
-       NavigationService.navigateToErrorView()
-     }
-   },
+      if (this.incorrectCredentialsInput(error)) {
+        this.alertMessage = this.errorResponse.message
+      } else {
+        NavigationService.navigateToErrorView()
+      }
+    },
 
     incorrectCredentialsInput(error) {
       return error.response.status === 403 && this.errorResponse.errorCode === 111;
     },
 
-    resetAlertMessage(){
+    resetAlertMessage() {
       this.alertMessage = ''
     },
     navigateToRegisterView() {

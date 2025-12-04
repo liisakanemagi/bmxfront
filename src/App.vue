@@ -1,7 +1,7 @@
 <template>
   <LogOutModal :log-out-modal-is-open="logOutModalIsOpen"
                @event-close-modal="closeLogOutModal"
-               @event-log-out-executed ="executeLogOut"
+               @event-log-out-executed="executeLogOut"
 
   />
   <nav>
@@ -13,7 +13,9 @@
       <button @click="startLogOutProcess" type="button" class="btn btn-secondary btn-sm ms-3">Logi valja</button>
     </template>
     <template v-else>
-      <button @click="navigateToLoginView" type="button" class="btn btn-secondary btn-sm ms-3">Logi sisse / registreeri</button>
+      <button @click="navigateToLoginView" type="button" class="btn btn-secondary btn-sm ms-3">Logi sisse /
+        registreeri
+      </button>
     </template>
 
   </nav>
@@ -40,19 +42,19 @@ export default {
 
   methods: {
 
-    startLogOutProcess(){
+    startLogOutProcess() {
       this.openLogOutModal()
     },
 
-    openLogOutModal(){
+    openLogOutModal() {
       this.logOutModalIsOpen = true
     },
 
-    closeLogOutModal(){
+    closeLogOutModal() {
       this.logOutModalIsOpen = false
     },
 
-    executeLogOut(){
+    executeLogOut() {
       this.closeLogOutModal()
       sessionStorage.clear()
       this.updateNavMenu()
