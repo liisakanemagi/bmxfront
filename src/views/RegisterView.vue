@@ -37,7 +37,7 @@
     <div class="row justify-content-center">
       <div class="row col-2">
         <div class="form-floating mb-3"></div>
-        <input v-model="password2" type="password" class="form-control" placeholder="Korda parooli">
+        <input v-model="passwordRetype" type="password" class="form-control" placeholder="Korda parooli">
       </div>
     </div>
     <div class="row justify-content-center mt-3">
@@ -68,7 +68,7 @@ export default {
     return {
       isPostingData: false,
       alertMessage: '',
-      password2: '',
+      passwordRetype: '',
       successMessage: '',
 
       errorResponse: {
@@ -93,7 +93,7 @@ export default {
     },
 
     allFieldsHaveCorrectInput() {
-      return this.userInfo.username !== '' && this.password2 !== '' && this.userInfo.password !== '' && this.userInfo.email !== '';
+      return this.userInfo.username !== '' && this.passwordRetype !== '' && this.userInfo.password !== '' && this.userInfo.email !== '';
     },
 
     executeRegister() {
@@ -104,13 +104,13 @@ export default {
             .catch(error => this.handleRegisterError(error))
             .finally(() => this.isPostingData = false)
       } else {
-        this.displayPasswordsAreNotMatching();
+        this.displayPasswordsAreNotMatchingAlert();
 
       }
     },
 
     passwordsAreMatching() {
-      return this.userInfo.password === this.password2;
+      return this.userInfo.password === this.passwordRetype;
     },
 
     startSpinner() {
@@ -131,7 +131,7 @@ export default {
       this.alertMessage = ' Täida kõik väljad'
     },
 
-    displayPasswordsAreNotMatching() {
+    displayPasswordsAreNotMatchingAlert() {
       this.alertMessage = 'sisestatud paroolid ei kattu'
     },
 
@@ -162,7 +162,7 @@ export default {
       this.userInfo.username = ''
       this.userInfo.password = ''
       this.userInfo.email = ''
-      this.password2 = ''
+      this.passwordRetype = ''
     },
 
   },
