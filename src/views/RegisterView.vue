@@ -3,7 +3,7 @@
     <div class="row justify-content-center">
       <div class ="col-6">
         <AlertDanger :alert-message = "alertMessage" @event-alert-box-closed ="resetAlertMessage" />
-        <AlertSuccess :alert-message = "successMessage" @event-alert-box-closed ="resetAlertMessage"/>
+        <AlertSuccess :alert-message = "successMessage" @event-alert-box-closed ="resetSuccessMessage"/>
       </div>
     </div>
 
@@ -86,12 +86,11 @@ export default {
   methods: {
 
     processRegister(){
-      if (this.userInfo.username !=='' && this.password2 !=='' && this.userInfo.password && this.userInfo.email){
+      if (this.userInfo.username !=='' && this.password2 !=='' && this.userInfo.password !=='' && this.userInfo.email !==''){
         this.executeRegister();
       } else {
         this.displayIncorrectInputAlert();
       }
-
     },
 
     displayIncorrectInputAlert(){
