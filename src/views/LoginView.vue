@@ -2,8 +2,8 @@
   <div class="container text-center">
 
     <div class="row justify-content-center">
-      <div class ="col-6">
-      <AlertDanger :alert-message = 'alertMessage' @event-alert-box-closed ='resetAlertMessage' />
+      <div class="col-6">
+        <AlertDanger :alert-message='alertMessage' @event-alert-box-closed='resetAlertMessage'/>
       </div>
     </div>
     <div class="row justify-content-center mt-3">
@@ -52,7 +52,7 @@ export default {
       isFetchingData: false,
       username: '',
       password: '',
-      alertMessage:'',
+      alertMessage: '',
 
       loginResponse: {
         userId: 0,
@@ -76,33 +76,36 @@ export default {
       }
     },
 
-    displayIncorrectInputAlert() {
-      this.alertMessage = 'Täida kõik väljad'
-    },
-
     executeLogin() {
       this.startSpinner()
       LoginService.sendGetLoginRequest(this.username, this.password)
           .then(response => this.handleLoginResponse(response))
           .catch(error => this.handleLoginError(error))
           .finally(() => this.isFetchingData = false)
-
-    },
-
-    handleLoginResponse(response) {
-      this.loginResponse = response.data;
-      sessionStorage.setItem('userId', this.loginResponse.userId)
-      sessionStorage.setItem('roleName', this.loginResponse.roleName)
-      this.updateNavMenuUserIsLoggedIn()
-      NavigationService.navigateToHomeView()
-    },
-
-    updateNavMenuUserIsLoggedIn() {
-      this.$emit('event-user-logged-in')
     },
 
     startSpinner() {
       this.isFetchingData = true
+    },
+
+    displayIncorrectInputAlert() {
+      this.alertMessage = 'Täida kõik väljad'
+    },
+
+    handleLoginResponse(response) {
+      this.loginResponse = response.data;
+      this.setSessionStorageItems();
+      this.updateNavMenuUserIsLoggedIn()
+      NavigationService.navigateToHomeView()
+    },
+
+    setSessionStorageItems() {
+      sessionStorage.setItem('userId', this.loginResponse.userId)
+      sessionStorage.setItem('roleName', this.loginResponse.roleName)
+    },
+
+    updateNavMenuUserIsLoggedIn() {
+      this.$emit('event-user-logged-in')
     },
 
     handleLoginError(error) {
@@ -118,12 +121,12 @@ export default {
       return error.response.status === 403 && this.errorResponse.errorCode === 111;
     },
 
-    resetAlertMessage() {
-      this.alertMessage = ''
-    },
-
     navigateToRegisterView() {
       NavigationService.navigateToRegisterView()
+    },
+
+    resetAlertMessage() {
+      this.alertMessage = ''
     },
   }
 }
