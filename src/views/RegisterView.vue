@@ -115,6 +115,7 @@ export default {
     hideAllFields() {
       this.displayAllFields = false
     },
+
     resetAlertMessages() {
       this.alertSuccessMessage = ''
       this.alertErrorMessage = ''

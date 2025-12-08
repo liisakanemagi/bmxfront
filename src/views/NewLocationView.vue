@@ -1,7 +1,9 @@
 <template>
   <h1>Lisa sõidukoht</h1>
-  <div class="row justify-content-center mt-4" >
+  <div class="row justify-content-center mt-4">
     <div class="col col-3">
+      <AlertError :alert-error-message='alertErrorMessage' @event-alert-box-closed='resetAlertMessages'/>
+      <AlertSuccess :alert-success-message="alertSuccessMessage" @event-alert-box-closed='resetAlertMessages'/>
       <div class="form-floating mb-3">
         <input v-model="location.locationName" type="text" class="form-control" placeholder="Nimi">
         <label>Nimi</label>
@@ -11,64 +13,76 @@
         <label>Aadress</label>
       </div>
       <div class="form-floating mb-3">
-        <textarea v-model="location.locationDescription" class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
+        <textarea v-model="location.locationDescription" class="form-control" placeholder="Leave a comment here"
+                  id="floatingTextarea2" style="height: 100px"></textarea>
         <label for="floatingTextarea2">Kirjeldus</label>
       </div>
-      <div class="dropdown mb-3">
-        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-          Sõidukoha tüüp
-        </button>
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="#">Action</a></li>
-          <li><a class="dropdown-item" href="#">Another action</a></li>
-          <li><a class="dropdown-item" href="#">Something else here</a></li>
-        </ul>
-      </div>
-      <div class="dropdown mb-3">
-        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-          Maakond
-        </button>
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="#">Action</a></li>
-          <li><a class="dropdown-item" href="#">Another action</a></li>
-          <li><a class="dropdown-item" href="#">Something else here</a></li>
-        </ul>
-      </div>
+      <LocationTypesDropdown :locationTypes="locationTypes" @event-new-location-type-selected="setNewLocationTypeId"/>
+      <CountyDropdown :counties="counties" @event-new-county-selected="setNewCountyId"/>
       <div class="form-floating mb-3">
-        <input v-model="location.locationAddress" type="text" class="form-control" placeholder="Aadress">
+        <input v-model="location.locationLng" type="number" class="form-control" placeholder="Aadress">
         <label>Pikkuskraad</label>
       </div>
       <div class="form-floating mb-3">
-        <input v-model="location.locationAddress" type="text" class="form-control" placeholder="Aadress">
+        <input v-model="location.locationLat" type="number" class="form-control" placeholder="Aadress">
         <label>Laiuskraad</label>
       </div>
-      <button
+      <button @click="processAddLocation"
               class="btn btn-secondary btn-sm" :disabled="isPostingData">
         <span v-if="isPostingData" class="spinner-border spinner-border-sm btn-sm" aria-hidden="true"></span>
-        <span class="btn btn-secondary btn-sm">Lisa</span>
+        <span class="btn btn-secondary btn-sm">Edasi</span>
       </button>
     </div>
   </div>
 </template>
 
 <script>
+import NavigationService from "@/services/NavigationService";
+import LocationTypesDropdown from "@/components/location/LocationTypesDropdown.vue";
+import CountyDropdown from "@/components/location/CountyDropdown.vue";
+import AlertError from "@/components/AlertError.vue";
+import AlertSuccess from "@/components/AlertSuccess.vue";
+import LocationTypeService from "@/services/LocationTypeService";
+import CountyService from "@/services/CountyService";
+import LocationService from "@/services/LocationService";
+
 export default {
   name: 'NewLocationView',
+  components: {AlertSuccess, AlertError, CountyDropdown, LocationTypesDropdown},
   data() {
     return {
-
-      isPostingData:true,
+      userId: Number(sessionStorage.getItem('userId')),
+      isPostingData: false,
+      alertErrorMessage: '',
+      alertSuccessMessage: '',
 
       location: {
         locationTypeId: 0,
         countyId: 0,
         locationName: '',
         locationAddress: '',
-        locationLng: 0,
-        locationLat: 0,
+        locationLng: null,
+        locationLat: null,
         locationDescription: ''
       },
 
+      locationTypes: [
+        {
+          locationTypeId: 0,
+          locationTypeName: '',
+          locationTypeColorCode: '',
+        }
+      ],
+
+      counties: [
+        {
+          countyId: 0,
+          countyName: '',
+          zoomLevel: 0,
+          countyLng: null,
+          countyLat: null,
+        }
+      ],
       errorResponse: {
         message: '',
         errorCode: 0
@@ -76,11 +90,89 @@ export default {
     }
   },
   methods: {
+    processAddLocation() {
+      this.handleInputErrorMessages();
+      if (this.allFieldsHaveCorrectInput())
+        this.executeAddLocation();
+    },
 
+    handleInputErrorMessages() {
+      if (this.location.locationName === '' || this.location.locationAddress === ''
+          || this.location.locationDescription === '' || this.location.locationLat === null
+          || this.location.locationLng === null) {
+        this.alertErrorMessage = 'Täida kõik väljad'
+      } else if (this.location.countyId === 0) {
+        this.alertErrorMessage = 'Vali maakond'
+      } else if (this.location.locationTypeId === 0) {
+        this.alertErrorMessage = 'Vali sõidukohatüüp'
+      }
+    },
 
+    allFieldsHaveCorrectInput() {
+      return this.alertErrorMessage === '';
+    },
 
+    executeAddLocation() {
+      this.startSpinner()
+      LocationService.sendPostLocationRequest(this.userId, this.location)
+          .then(() => NavigationService.navigateToEditLocationView())
+          .catch(error => this.handleAddLocationError(error))
+          .finally(() => this.stopSpinner())
+    },
+
+    handleAddLocationError(error) {
+      this.errorResponse = error.response?.data
+      if (this.locationNameAlreadyExists(error)) {
+        this.displayLocationNameAlreadyExists();
+      } else {
+        NavigationService.navigateToErrorView()
+      }
+    },
+
+    locationNameAlreadyExists(error) {
+      return error.response.status === 403 && this.errorResponse.errorCode === 113;
+    },
+
+    displayLocationNameAlreadyExists() {
+      this.alertErrorMessage = this.errorResponse.message
+    },
+
+    getLocationTypes() {
+      LocationTypeService.sendGetLocationTypeRequest()
+          .then(response => this.locationTypes = response.data)
+          .catch(() => NavigationService.navigateToErrorView())
+    },
+
+    getCounties() {
+      CountyService.sendGetCountiesRequest()
+          .then(response => this.counties = response.data)
+          .catch(() => NavigationService.navigateToErrorView())
+    },
+
+    setNewLocationTypeId(selectedLocationTypeId) {
+      this.location.locationTypeId = selectedLocationTypeId
+    },
+
+    setNewCountyId(selectedCountyId) {
+      this.location.countyId = selectedCountyId
+    },
+
+    resetAlertMessages() {
+      this.alertErrorMessage = ''
+      this.alertSuccessMessage = ''
+    },
+
+    startSpinner() {
+      this.isPostingData = true
+    },
+
+    stopSpinner() {
+      this.isPostingData = false
+    },
   },
   mounted() {
+    this.getLocationTypes()
+    this.getCounties()
   }
 }
 </script>

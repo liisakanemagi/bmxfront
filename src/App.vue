@@ -7,6 +7,8 @@
   <nav>
     <router-link to="/">Home</router-link>
     <router-link to="/location">Sõidukohad</router-link>
+    <router-link to="/new-location">Lisa Sõidukoht</router-link>
+    <router-link to="/edit-location">Muuda sõidukohta</router-link>
 
 
     <template v-if="isLoggedIn">

@@ -5,6 +5,7 @@ import ErrorView from "@/views/ErrorView.vue";
 import LocationView from "@/views/LocationView.vue";
 import registerView from "@/views/RegisterView.vue";
 import newLocationView from "@/views/NewLocationView.vue";
+import editLocationView from "@/views/EditLocationView.vue";
 
 const routes = [
     {
@@ -35,8 +36,13 @@ const routes = [
     },
     {
         path: '/new-location',
-        name: 'locationRoute',
+        name: 'newLocationRoute',
         component: newLocationView
+    },
+    {
+        path: '/edit-location',
+        name: 'editLocationRoute',
+        component: editLocationView
     }
 
 ]

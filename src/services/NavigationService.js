@@ -3,7 +3,7 @@ import router from "@/router"
 export default {
 
     navigateToErrorView (){
-        router.push({name:'errorRoute'})
+  //      router.push({name:'errorRoute'})
     },
 
     navigateToHomeView(){
@@ -14,8 +14,11 @@ export default {
         router.push({name: 'loginRoute'})
     },
 
- navigateToRegisterView(){
+    navigateToRegisterView(){
         router.push({name: 'registerRoute'})
-    }
+    },
 
+    navigateToEditLocationView(){
+        router.push({name: 'editLocationRoute'})
+    }
 }
