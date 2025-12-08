@@ -1,15 +1,15 @@
 <template>
   <h1>Lisa sõidukoht</h1>
   <div class="d-flex justify-content-center mt-4">
-    <div class="d-flex flex-column col-3 gap-3">
+    <form @submit="processAddLocation" class="d-flex flex-column col-3 gap-3">
       <AlertError :alert-error-message='alertErrorMessage' @event-alert-box-closed='resetAlertMessages'/>
       <AlertSuccess :alert-success-message="alertSuccessMessage" @event-alert-box-closed='resetAlertMessages'/>
       <div class="form-floating">
-        <input v-model="location.locationName" type="text" class="form-control" placeholder="Nimi">
+        <input v-model="location.locationName" type="text" class="form-control">
         <label>Nimi</label>
       </div>
       <div class="form-floating">
-        <input v-model="location.locationAddress" type="text" class="form-control" placeholder="Aadress">
+        <input v-model="location.locationAddress" type="text" class="form-control">
         <label>Aadress</label>
       </div>
       <div class="form-floating">
@@ -20,19 +20,19 @@
       <LocationTypesDropdown :locationTypes="locationTypes" @event-new-location-type-selected="setNewLocationTypeId"/>
       <CountyDropdown :counties="counties" @event-new-county-selected="setNewCountyId"/>
       <div class="form-floating">
-        <input v-model="location.locationLng" type="number" class="form-control" placeholder="Aadress">
-        <label>Pikkuskraad</label>
-      </div>
-      <div class="form-floating">
-        <input v-model="location.locationLat" type="number" class="form-control" placeholder="Aadress">
+        <input v-model="location.locationLat" type="number" class="form-control" min="-90" max="90">
         <label>Laiuskraad</label>
       </div>
-      <button @click="processAddLocation"
+      <div class="form-floating">
+        <input v-model="location.locationLng" type="number" class="form-control" min="-180" max="180">
+        <label>Pikkuskraad</label>
+      </div>
+      <button
               class="btn btn-secondary btn-sm" :disabled="isPostingData">
         <span v-if="isPostingData" class="spinner-border spinner-border-sm btn-sm" aria-hidden="true"></span>
         <span class="btn btn-secondary btn-sm">Edasi</span>
       </button>
-    </div>
+    </form>
   </div>
 </template>
 
@@ -90,7 +90,8 @@ export default {
     }
   },
   methods: {
-    processAddLocation() {
+    processAddLocation(e) {
+      e.preventDefault()
       this.handleInputErrorMessages();
       if (this.allFieldsHaveCorrectInput())
         this.executeAddLocation();
