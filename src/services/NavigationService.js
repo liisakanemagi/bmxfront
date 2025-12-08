@@ -18,7 +18,7 @@ export default {
         router.push({name: 'registerRoute'})
     },
 
-    navigateToEditLocationView(){
-        router.push({name: 'editLocationRoute'})
+    navigateToEditLocationView(locationId){
+        router.push({name: 'editLocationRoute', params:{id: locationId}})
     }
 }

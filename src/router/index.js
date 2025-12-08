@@ -40,11 +40,10 @@ const routes = [
         component: NewLocationView
     },
     {
-        path: '/edit-location',
+        path: '/locations/:id',
         name: 'editLocationRoute',
         component: EditLocationView
     }
-
 ]
 
 const router = createRouter({
