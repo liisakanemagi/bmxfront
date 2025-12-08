@@ -7,9 +7,8 @@
   <nav class="d-flex gap-2 justify-content-center">
     <router-link to="/">Home</router-link>
     <router-link to="/location">Sõidukohad</router-link>
-    <router-link to="/new-location">Lisa Sõidukoht</router-link>
-    <router-link to="/edit-location">Muuda sõidukohta</router-link>
-
+    <router-link v-if="isLoggedIn" to="/new-location">Lisa Sõidukoht</router-link>
+    <router-link v-if="isLoggedIn" to="/edit-location">Muuda sõidukohta</router-link>
 
     <template v-if="isLoggedIn">
       <button @click="startLogOutProcess" type="button" class="btn btn-secondary btn-sm ms-3">Logi välja</button>
