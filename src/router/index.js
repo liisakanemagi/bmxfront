@@ -2,10 +2,10 @@ import {createRouter, createWebHistory} from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LoginView from "@/views/LoginView.vue";
 import ErrorView from "@/views/ErrorView.vue";
-import LocationView from "@/views/LocationView.vue";
-import registerView from "@/views/RegisterView.vue";
-import newLocationView from "@/views/NewLocationView.vue";
-import editLocationView from "@/views/EditLocationView.vue";
+import LocationsView from "@/views/LocationView.vue";
+import RegisterView from "@/views/RegisterView.vue";
+import NewLocationView from "@/views/NewLocationView.vue";
+import EditLocationView from "@/views/EditLocationView.vue";
 
 const routes = [
     {
@@ -25,24 +25,24 @@ const routes = [
         component: ErrorView,
     },
     {
-        path: '/location',
-        name: 'locationRoute',
-        component: LocationView
+        path: '/locations',
+        name: 'locationsRoute',
+        component: LocationsView
     },
     {
         path: '/register',
         name: 'registerRoute',
-        component: registerView
+        component: RegisterView
     },
     {
-        path: '/new-location',
+        path: '/locations/new',
         name: 'newLocationRoute',
-        component: newLocationView
+        component: NewLocationView
     },
     {
         path: '/edit-location',
         name: 'editLocationRoute',
-        component: editLocationView
+        component: EditLocationView
     }
 
 ]
