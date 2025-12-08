@@ -1,6 +1,6 @@
 <template>
   <h1>Lisa sõidukoht</h1>
-  <div class="row justify-content-center mt-4">
+  <div class="d-flex justify-content-center mt-4">
     <div class="d-flex flex-column col-3 gap-3">
       <AlertError :alert-error-message='alertErrorMessage' @event-alert-box-closed='resetAlertMessages'/>
       <AlertSuccess :alert-success-message="alertSuccessMessage" @event-alert-box-closed='resetAlertMessages'/>
