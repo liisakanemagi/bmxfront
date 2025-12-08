@@ -4,7 +4,7 @@
                @event-log-out-executed="executeLogOut"
 
   />
-  <nav>
+  <nav class="d-flex gap-2 justify-content-center">
     <router-link to="/">Home</router-link>
     <router-link to="/location">Sõidukohad</router-link>
     <router-link to="/new-location">Lisa Sõidukoht</router-link>
