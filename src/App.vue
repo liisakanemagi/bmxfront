@@ -10,14 +10,13 @@
     <router-link v-if="isLoggedIn" to="/new-location">Lisa Sõidukoht</router-link>
     <router-link v-if="isLoggedIn" to="/edit-location">Muuda sõidukohta</router-link>
 
-    <template v-if="isLoggedIn">
-      <button @click="startLogOutProcess" type="button" class="btn btn-secondary btn-sm ms-3">Logi välja</button>
-    </template>
-    <template v-else>
-      <button @click="navigateToLoginView" type="button" class="btn btn-secondary btn-sm ms-3">Logi sisse /
-        registreeri
-      </button>
-    </template>
+    <button v-if="isLoggedIn" @click="startLogOutProcess" type="button" class="btn btn-secondary btn-sm ms-3">
+      Logi välja
+    </button>
+
+    <button v-else @click="navigateToLoginView" type="button" class="btn btn-secondary btn-sm ms-3">
+      Logi sisse / registreeri
+    </button>
   </nav>
   <router-view @event-user-logged-in="updateNavMenu"/>
 </template>
