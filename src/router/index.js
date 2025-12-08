@@ -4,6 +4,7 @@ import LoginView from "@/views/LoginView.vue";
 import ErrorView from "@/views/ErrorView.vue";
 import LocationView from "@/views/LocationView.vue";
 import registerView from "@/views/RegisterView.vue";
+import newLocationView from "@/views/NewLocationView.vue";
 
 const routes = [
     {
@@ -31,6 +32,11 @@ const routes = [
         path: '/register',
         name: 'registerRoute',
         component: registerView
+    },
+    {
+        path: '/new-location',
+        name: 'locationRoute',
+        component: newLocationView
     }
 
 ]

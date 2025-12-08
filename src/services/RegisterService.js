@@ -5,5 +5,4 @@ export default {
     sendPostRegisterRequest(userInfo) {
         return axios.post('/register', userInfo)
     }
-
 }
