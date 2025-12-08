@@ -1,29 +1,29 @@
 <template>
   <h1>Lisa sõidukoht</h1>
   <div class="row justify-content-center mt-4">
-    <div class="col col-3">
+    <div class="d-flex flex-column col-3 gap-3">
       <AlertError :alert-error-message='alertErrorMessage' @event-alert-box-closed='resetAlertMessages'/>
       <AlertSuccess :alert-success-message="alertSuccessMessage" @event-alert-box-closed='resetAlertMessages'/>
-      <div class="form-floating mb-3">
+      <div class="form-floating">
         <input v-model="location.locationName" type="text" class="form-control" placeholder="Nimi">
         <label>Nimi</label>
       </div>
-      <div class="form-floating mb-3">
+      <div class="form-floating">
         <input v-model="location.locationAddress" type="text" class="form-control" placeholder="Aadress">
         <label>Aadress</label>
       </div>
-      <div class="form-floating mb-3">
+      <div class="form-floating">
         <textarea v-model="location.locationDescription" class="form-control" placeholder="Leave a comment here"
                   id="floatingTextarea2" style="height: 100px"></textarea>
         <label for="floatingTextarea2">Kirjeldus</label>
       </div>
       <LocationTypesDropdown :locationTypes="locationTypes" @event-new-location-type-selected="setNewLocationTypeId"/>
       <CountyDropdown :counties="counties" @event-new-county-selected="setNewCountyId"/>
-      <div class="form-floating mb-3">
+      <div class="form-floating">
         <input v-model="location.locationLng" type="number" class="form-control" placeholder="Aadress">
         <label>Pikkuskraad</label>
       </div>
-      <div class="form-floating mb-3">
+      <div class="form-floating">
         <input v-model="location.locationLat" type="number" class="form-control" placeholder="Aadress">
         <label>Laiuskraad</label>
       </div>
