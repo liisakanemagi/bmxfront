@@ -13,4 +13,8 @@ export default {
         return axios.get('/locations')
     },
 
+    sendGetFilteredLocationsRequest() {
+        return axios.get('/locations/filtered')
+    },
+
 }

@@ -7,11 +7,11 @@
       <LocationTypesCheckbox/>
       </div>
     <div class="col">
-      <LocationsTable/>
+
     </div>
   </div>
   <div>
-
+    <LocationsTable :locations="locationsTable"/>
   </div>
 </template>
 
@@ -22,6 +22,7 @@ import NavigationService from "@/services/NavigationService";
 import LocationService from "@/services/LocationService";
 import LocationsTable from "@/components/location/LocationsTable.vue";
 import LocationTypesCheckbox from "@/components/location/LocationTypesCheckbox.vue";
+import LocationTypeService from "@/services/LocationTypeService";
 
 export default {
   name: 'LocationView',
@@ -52,15 +53,15 @@ export default {
         countyLat: null
       }
     ],
-      locations: {
-        locationTypeId: 0,
-        countyId: 0,
-        locationName: '',
-        countyName: '',
-        locationDescription: '',
-        typeColorCode: '',
-        locationImageData: '',
-        isInFavorites: false
+      locationsTable: [],
+
+      // See on vajalik, et getLocationTypes() meetod saaks andmed salvestada
+      locationTypes: [],
+
+      // See on vajalik, et setNewCountyId() meetod saaks korrektselt töötada
+      // Tavaliselt hoitakse siin filtrite valikuid
+      filters: {
+        countyId: null
       },
 
       LocationTags: [
@@ -88,11 +89,23 @@ methods: {
   setNewCountyId(selectedCountyId) {
     this.location.countyId = selectedCountyId
   },
+  getLocationTypes() {
+    LocationTypeService.sendGetLocationTypeRequest()
+        .then(response => this.locationTypes = response.data)
+        .catch(() => NavigationService.navigateToErrorView())
 
+  },
+  getFilteredLocations() {
+    LocationService.sendGetFilteredLocationsRequest()
+        .then(response => this.locationsTable = response.data)
+        .catch(() => NavigationService.navigateToErrorView())
+  },
 },
   mounted() {
   this.getLocations()
   this.getCounties()
+  this.getLocationTypes()
+  this.getFilteredLocations()
 }
 }
 </script>
