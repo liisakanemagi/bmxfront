@@ -34,11 +34,14 @@ methods: {
     CountyService.sendGetCountiesRequest()
         .then(response => this.counties = response.data)
         .catch(() => NavigationService.navigateToErrorView())
-  }
+  },
+
+  setNewCountyId(selectedCountyId) {
+    this.location.countyId = selectedCountyId
+  },
 
 },
   mounted() {
-  this.getLocationTypes()
   this.getCounties()
 }
 }
