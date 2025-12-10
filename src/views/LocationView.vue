@@ -1,7 +1,8 @@
 <template>
   <h1>Sõidukohad</h1>
   <div>
-  <CountyDropdown :counties="counties" @event-new-county-selected="setNewCountyId"/>
+    <CountyDropdown :counties="counties" @event-new-county-selected="setNewCountyId"/>
+
   </div>
 </template>
 
@@ -15,6 +16,21 @@ export default {
   components: {CountyDropdown},
   data() {
     return{
+
+      filteredLocation:
+      [
+          {
+            locationId: 0,
+            locationName: '',
+            locationAverageRating: 0,
+            locationAddress: '',
+            typeColorCode: '',
+            countyName: '',
+            locationImageData: '',
+            isInFavourites: true
+          }
+          ],
+      
     counties: [
       {
         countyId: 0,
@@ -23,11 +39,26 @@ export default {
         countyLng: null,
         countyLat: null,
       }
-    ]
+    ],
+      location: {
+        locationTypeId: 0,
+        countyId: 0,
+        locationName: '',
+        locationAddress: '',
+        locationLng: null,
+        locationLat: null,
+        locationDescription: ''
+      },
+
+      LocationTags: [
+        {
+          tagId: 0,
+          tagName: ''
+        }
+      ],
   }
 },
-
-
+  
 methods: {
 
   getCounties() {
@@ -36,9 +67,9 @@ methods: {
         .catch(() => NavigationService.navigateToErrorView())
   },
 
-  setNewCountyId(){
-
-  }
+  setNewCountyId(selectedCountyId) {
+    this.location.countyId = selectedCountyId
+  },
 
 },
   mounted() {
