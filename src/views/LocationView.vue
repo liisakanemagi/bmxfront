@@ -6,7 +6,6 @@
   <CountyDropdown :counties="counties" @event-new-county-selected="setNewCountyId"/>
       </div>
   </div>
-
 </template>
 
 <script>
@@ -18,22 +17,31 @@ export default {
   name: 'LocationView',
   components: {CountyDropdown},
   data() {
-    
     return{
+
       filteredLocation:
       [
-        {
-           locationId: 0,
-           locationName: '',
-           locationAverageRating: 0,
-           locationAddress: '',
-           typeColorCode: '',
-           countyName: '',
-           locationImageData: '',
-           isInFavourites: true
+          {
+            locationId: 0,
+            locationName: '',
+            locationAverageRating: 0,
+            locationAddress: '',
+            typeColorCode: '',
+            countyName: '',
+            locationImageData: '',
+            isInFavourites: true
           }
-      ],
-      
+          ],
+
+    counties: [
+      {
+        countyId: 0,
+        countyName: '',
+        zoomLevel: 0,
+        countyLng: null,
+        countyLat: null,
+      }
+    ],
       location: {
         locationTypeId: 0,
         countyId: 0,
@@ -43,18 +51,15 @@ export default {
         locationLat: null,
         locationDescription: ''
       },
-    counties: [
-      {
-        countyId: 0,
-        countyName: '',
-        zoomLevel: 0,
-        countyLng: null,
-        countyLat: null,
-      }
-    ]
+
+      LocationTags: [
+        {
+          tagId: 0,
+          tagName: ''
+        }
+      ],
   }
 },
-
 
 methods: {
 
