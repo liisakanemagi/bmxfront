@@ -47,7 +47,39 @@ export default {
   data() {
     return {
       locationId: this.$route.params.id,
-      location: null
+      // location: null
+      alertErrorMessage: '',
+      alertSuccessMessage: '',
+
+      location: {
+        locationTypeId: 0,
+        countyId: 0,
+        locationName: '',
+        locationAddress: '',
+        locationLng: null,
+        locationLat: null,
+        locationDescription: ''
+      },
+
+      locationTypes: [
+        {
+          locationTypeId: 0,
+          locationTypeName: '',
+          locationTypeColorCode: '',
+        }
+      ],
+
+      counties: [
+        {
+          countyId: 0,
+          countyName: '',
+          zoomLevel: 0,
+          countyLng: null,
+          countyLat: null,
+        }
+        ]
+
+
 
     }
   },
