@@ -8,7 +8,7 @@
 export default {
   name: 'LocationTagDropDown',
   props: {
-    locationTags: Array,
+    tags: Array,
     selectedTagId: {
       type: Number,
       default: 0
