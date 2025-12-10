@@ -1,10 +1,17 @@
 <template>
   <h1>Sõidukohad</h1>
 
-  <div class="d-flex justify-content-center mt-4">
-    <div class="d-flex flex-column col-3 gap-3 ">
+  <div class="row d-flex justify-content-center mt-4">
+    <div class="col d-flex flex-column col-3 gap-3 justify-content-center">
   <CountyDropdown :counties="counties" @event-new-county-selected="setNewCountyId"/>
+      <LocationTypesCheckbox/>
       </div>
+    <div class="col">
+      <LocationsTable/>
+    </div>
+  </div>
+  <div>
+
   </div>
 </template>
 
@@ -12,10 +19,13 @@
 import CountyDropdown from "@/components/location/CountyDropdown.vue";
 import CountyService from "@/services/CountyService";
 import NavigationService from "@/services/NavigationService";
+import LocationService from "@/services/LocationService";
+import LocationsTable from "@/components/location/LocationsTable.vue";
+import LocationTypesCheckbox from "@/components/location/LocationTypesCheckbox.vue";
 
 export default {
   name: 'LocationView',
-  components: {CountyDropdown},
+  components: {LocationTypesCheckbox, LocationsTable, CountyDropdown},
   data() {
     return{
 
@@ -39,17 +49,18 @@ export default {
         countyName: '',
         zoomLevel: 0,
         countyLng: null,
-        countyLat: null,
+        countyLat: null
       }
     ],
-      location: {
+      locations: {
         locationTypeId: 0,
         countyId: 0,
         locationName: '',
-        locationAddress: '',
-        locationLng: null,
-        locationLat: null,
-        locationDescription: ''
+        countyName: '',
+        locationDescription: '',
+        typeColorCode: '',
+        locationImageData: '',
+        isInFavorites: false
       },
 
       LocationTags: [
@@ -62,6 +73,11 @@ export default {
 },
 
 methods: {
+  getLocations() {
+    LocationService.sendGetLocationsRequest()
+        .then(response => this.locations = response.data)
+        .catch(() => NavigationService.navigateToErrorView())
+  },
 
   getCounties() {
     CountyService.sendGetCountiesRequest()
@@ -75,6 +91,7 @@ methods: {
 
 },
   mounted() {
+  this.getLocations()
   this.getCounties()
 }
 }

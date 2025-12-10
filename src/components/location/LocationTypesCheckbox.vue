@@ -2,7 +2,7 @@
   <div>
   <h4>Sõidukoha tüübid:
   </h4>
-    <div>
+    <div v-for="locationType in locationTypes" :key="locationType.id">
       <input type="checkbox" class="form-check-input">
       <label>
         {{locationType.locationTypeName}}
@@ -18,10 +18,11 @@ import locationTypeService from "@/services/LocationTypeService";
 export default {
   name: "LocationTypesCheckbox",
   props:{
-    locationTypes: Array
-  },
-  computed: {
-    locationTypeService() {
+    locationTypes: Array,
+    },
+
+  methods: {
+    filterLocationType(locationTypeId, ) {
       return locationTypeService
     }
   }

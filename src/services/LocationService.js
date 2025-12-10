@@ -8,6 +8,9 @@ export default {
                 userId: userId
             }
         })
-    }
+    },
+    sendGetLocationsRequest() {
+        return axios.get('/locations')
+    },
 
 }
