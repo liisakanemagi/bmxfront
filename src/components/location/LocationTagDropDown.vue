@@ -1,5 +1,5 @@
 <template>
-  <select @change="selectNewTag($event.target.value)" :value="selectedTagId" class="form-select">
+  <select @change="newTagSelected($event.target.value)" :value="selectedTagId" class="form-select">
     <option selected :value="0">Vali tag</option>
     <option v-for="tag in tags" :key="tag.tagId" :value="tag.tagId">{{ tag.tagName }}</option>
   </select>
@@ -8,6 +8,8 @@
 export default {
   name: 'LocationTagDropDown',
   props: {
+
+    locationTag: Object,
     tags: Array,
     selectedTagId: {
       type: Number,
@@ -16,9 +18,10 @@ export default {
   },
 
   methods: {
-    selectNewTag(selectedTagId) {
-      this.$emit('event-new-tag-selected', Number(selectedTagId))
+    newTagSelected(selectedTagId) {
+      this.$emit('event-new-locationTag-selected', Number(selectedTagId))
     }
+
   }
 }
 </script>

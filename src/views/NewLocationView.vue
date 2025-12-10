@@ -116,7 +116,7 @@ export default {
     executeAddLocation() {
       this.startSpinner()
       LocationService.sendPostLocationRequest(this.userId, this.location)
-          .then(response => NavigationService.navigateToEditLocationView(response.data.locationId))
+          .then(response => NavigationService.navigateToEditLocationView(response.data))
           .catch(error => this.handleAddLocationError(error))
           .finally(() => this.stopSpinner())
     },

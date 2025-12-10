@@ -36,13 +36,13 @@
       <hr>
       <div class="d-flex align-items-center gap-3">
         <h1 class="mb-0">Pildid</h1>
-        <font-awesome-icon icon="fa-solid fa-plus" style="cursor: pointer" @click="addImage"/>
+        <ImageInput ref="imageInput" @event-new-image-selected = "handleImageSelected"/>
       </div>
       <hr>
       <div class="d-flex align-items-center gap-3">
         <h1 class="mb-0">Tagid</h1>
         <font-awesome-icon icon="fa-solid fa-plus" style="cursor: pointer" @click="addTag"/>
-        <LocationTagDropDown :tags="tags" />
+        <LocationTagDropDown :tags="tags" @event-new-locationTag-selected = "addLocationTag"/>
       </div>
     </form>
   </div>
@@ -58,11 +58,13 @@ import NavigationService from "@/services/NavigationService";
 import LocationTypeService from "@/services/LocationTypeService";
 import CountyService from "@/services/CountyService";
 import LocationTagDropDown from "@/components/location/LocationTagDropDown.vue";
-import LocationTagService from "@/services/LocationTagService";
+import TagService from "@/services/TagService";
+import ImageInput from "@/components/Image/ImageInput.vue";
+import LocationImageService from "@/services/LocationImageService";
 
 export default {
   name: 'EditLocationView',
-  components: {LocationTagDropDown, CountyDropdown, LocationTypesDropdown, AlertSuccess, AlertError},
+  components: {ImageInput, LocationTagDropDown, CountyDropdown, LocationTypesDropdown, AlertSuccess, AlertError},
   data() {
     return {
       isView: true,
@@ -97,14 +99,26 @@ export default {
           countyLat: null,
         }
       ],
-
       tags:
           [
             {
               tagId:0,
               tagName: ''
             }
-          ]
+          ],
+      locationTag:
+          {
+            locationId: 0,
+            tagId: 0,
+            tagName: ''
+          },
+
+      locationImage:
+    {
+      locationId: 0,
+      locationImageData: ''
+    }
+
     }
   },
   methods: {
@@ -128,13 +142,24 @@ export default {
     },
 
     getTags(){
-    LocationTagService.sendGetTagRequest()
+    TagService.sendGetTagRequest()
         .then(response =>this.tags = response.data)
         .catch(() => NavigationService.navigateToErrorView())
     },
 
-    addImage(){
+    // addLocationTag(){
+    //   TagService.sendPostLocationTagRequest(this.locationTag)
+    //       .then()
+    //       .catch(() => NavigationService.navigateToErrorView())
+    //
+    // },
 
+    handleImageSelected(imageData) {
+      this.locationImage.locationId = this.locationId
+      this.locationImage.locationImageData = imageData
+      LocationImageService.sendPostLocationImageRequest(this.locationImage)
+          .then()
+          .catch(() => NavigationService.navigateToErrorView())
     },
 
     addTag(){
