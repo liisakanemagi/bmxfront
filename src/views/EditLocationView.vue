@@ -27,7 +27,7 @@
       </div>
       <button>
 
-        <span class="btn btn-secondary btn-sm">Salvesta</span>
+        <span class="btn btn-secondary btn-sm">Muuda asukoha infot</span>
       </button>
     </form>
   </div>
