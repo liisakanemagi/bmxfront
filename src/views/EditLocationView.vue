@@ -45,7 +45,7 @@
       <div class="d-flex align-items-center gap-3">
         <h1 class="mb-0">Tagid</h1>
 <!--        <font-awesome-icon icon="fa-solid fa-plus" style="cursor: pointer" @click="addTag"/>-->
-        <TagsDropdown :tags="tags" @event-new-locationTag-selected = "setSelectedLocationTagId"/>
+        <TagsDropdown :tags="tags" @event-new-tag-selected = "setSelectedLocationTagId"/>
       </div>
       <div>
         <button @click="addLocationTag" type="button" class="btn btn-secondary btn-sm">Lisa tag</button>
@@ -155,17 +155,23 @@ export default {
         .catch(() => NavigationService.navigateToErrorView())
     },
 
-    setSelectedLocationTagId(selectedTagId){
-      this.selectedTagId = selectedTagId
+
+
+    setSelectedLocationTagId(tagId) {
+      if (tagId === 0) {
+        this.selectedTagId = null;
+        return;
+      }
+
+      this.selectedTagId = tagId;
+
     },
 
-    addLocationTag(){
-      this.locationTags.locationId = this.locationId
-      this.locationTags.tagId =this.selectedTagId
-      TagService.sendPostLocationTagRequest(this.locationTags)
+
+    addLocationTag() {
+      TagService.sendPostLocationTagRequest(this.locationId, this.selectedTagId)
           .then(() => this.getLocationTags())
           .catch(() => NavigationService.navigateToErrorView())
-        //Todo parandada tagi lisamine, vale andmevorming.
     },
 
     handleImageSelected(imageData) {
@@ -182,9 +188,9 @@ export default {
           .catch(() => NavigationService.navigateToErrorView())
     },
 
-    getLocationTags() {
-
-    },
+    // getLocationTags() {
+    //
+    // },
 
 
     resetAlertMessages() {
@@ -198,7 +204,7 @@ export default {
     this.getLocationTypes()
     this.getCounties()
     this.getTags()
-    this.getLocationTags()
+    // this.getLocationTags()
   }
 }
 </script>
