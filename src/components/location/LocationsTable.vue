@@ -1,20 +1,20 @@
 <template>
   <div class="container text-center">
-    <div v-for="location in locations" class="row">
+    <div v-for="location in filteredLocations" class="row">
       <div class="col">
         Värviga pin
       </div>
       <div class="col">
-        Nimi, aadress {{location.locationName}}, {{location.locationAddress}}
+        Nimi, aadress {{ filteredLocations.locationName }}, {{ filteredLocations.locationAddress }}
       </div>
       <div class="col">
-        keskmine hinne {{location.locationRating}}
+        keskmine hinne {{ filteredLocations.locationRating }}
       </div>
       <div class="col">
-        Pilt {{location.locationImage}}
+        Pilt {{ filteredLocations.locationImage }}
       </div>
       <div v-if="isLoggedIn" class="col">
-        Favorite y/n {{location.locationFavorite}}
+        Favorite y/n {{ filteredLocations.locationFavorite }}
       </div>
     </div>
   </div>
@@ -24,8 +24,7 @@
 export default {
   name: 'LocationsTable',
   props: {
-    locations: Array,
-    isLoggedIn: false,
+    filteredLocations: Array
   },
 
 }

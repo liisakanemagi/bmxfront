@@ -3,9 +3,9 @@
 
   <div class="row d-flex justify-content-center mt-4">
     <div class="col d-flex flex-column col-3 gap-3 justify-content-center">
-  <CountyDropdown :counties="counties" @event-new-county-selected="setNewCountyId"/>
+      <CountyDropdown :counties="counties" @event-new-county-selected="setNewCountyId"/>
       <LocationTypesCheckbox/>
-      </div>
+    </div>
     <div class="col">
 
     </div>
@@ -31,28 +31,28 @@ export default {
     return{
 
       filteredLocation:
-      [
-          {
-            locationId: 0,
-            locationName: '',
-            locationAverageRating: 0,
-            locationAddress: '',
-            typeColorCode: '',
-            countyName: '',
-            locationImageData: '',
-            isInFavourites: true
-          }
+          [
+            {
+              locationId: 0,
+              locationName: '',
+              locationAverageRating: 0,
+              locationAddress: '',
+              typeColorCode: '',
+              countyName: '',
+              locationImageData: '',
+              isInFavourites: true
+            }
           ],
 
-    counties: [
-      {
-        countyId: 0,
-        countyName: '',
-        zoomLevel: 0,
-        countyLng: null,
-        countyLat: null
-      }
-    ],
+      counties: [
+        {
+          countyId: 0,
+          countyName: '',
+          zoomLevel: 0,
+          countyLng: null,
+          countyLat: null
+        }
+      ],
       locationsTable: [],
 
       // See on vajalik, et getLocationTypes() meetod saaks andmed salvestada
@@ -70,42 +70,42 @@ export default {
           tagName: ''
         }
       ],
-  }
-},
-
-methods: {
-  getLocations() {
-    LocationService.sendGetLocationsRequest()
-        .then(response => this.locations = response.data)
-        .catch(() => NavigationService.navigateToErrorView())
+    }
   },
 
-  getCounties() {
-    CountyService.sendGetCountiesRequest()
-        .then(response => this.counties = response.data)
-        .catch(() => NavigationService.navigateToErrorView())
-  },
+  methods: {
+    getLocations() {
+      LocationService.sendGetLocationsRequest()
+          .then(response => this.locations = response.data)
+          .catch(() => NavigationService.navigateToErrorView())
+    },
 
-  setNewCountyId(selectedCountyId) {
-    this.location.countyId = selectedCountyId
-  },
-  getLocationTypes() {
-    LocationTypeService.sendGetLocationTypeRequest()
-        .then(response => this.locationTypes = response.data)
-        .catch(() => NavigationService.navigateToErrorView())
+    getCounties() {
+      CountyService.sendGetCountiesRequest()
+          .then(response => this.counties = response.data)
+          .catch(() => NavigationService.navigateToErrorView())
+    },
 
+    setNewCountyId(selectedCountyId) {
+      this.location.countyId = selectedCountyId
+    },
+    getLocationTypes() {
+      LocationTypeService.sendGetLocationTypeRequest()
+          .then(response => this.locationTypes = response.data)
+          .catch(() => NavigationService.navigateToErrorView())
+
+    },
+    getFilteredLocations() {
+      LocationService.sendGetFilteredLocationsRequest()
+          .then(response => this.filteredLocation = response.data)
+          .catch(() => NavigationService.navigateToErrorView())
+    },
   },
-  getFilteredLocations() {
-    LocationService.sendGetFilteredLocationsRequest()
-        .then(response => this.locationsTable = response.data)
-        .catch(() => NavigationService.navigateToErrorView())
-  },
-},
   mounted() {
-  this.getLocations()
-  this.getCounties()
-  this.getLocationTypes()
-  this.getFilteredLocations()
-}
+    this.getLocations()
+    this.getCounties()
+    this.getLocationTypes()
+    this.getFilteredLocations()
+  }
 }
 </script>
