@@ -18,4 +18,13 @@ export default {
         })
     },
 
+    sendGetLocationsRequest() {
+        return axios.get('/locations')
+    },
+
+    sendGetFilteredLocationsRequest() {
+        return axios.get('/locations/filtered')
+    },
+
+
 }
