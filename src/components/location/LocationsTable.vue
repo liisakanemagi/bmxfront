@@ -12,7 +12,7 @@
         {{ location.locationAverageRating }}
       </div>
       <div class="col">
-        {{ location.locationImageData }}
+        <LocationImage :image-data="location.locationImageData"/>
       </div>
       <div v-if="isLoggedIn" class="col">
         <font-awesome-icon @click="removeFromFavorites(location.locationId)" v-if="location.isInFavourites" icon="fa-solid fa-heart" />
@@ -27,10 +27,11 @@
 import SessionStorageService from "@/services/SessionStorageService";
 import FilterPin from "@/components/FilterPin.vue";
 import StarRating from "@/components/StarRating.vue";
+import LocationImage from "@/components/map/LocationImage.vue";
 
 export default {
   name: 'LocationsTable',
-  components: {StarRating, Pin: FilterPin},
+  components: {LocationImage, StarRating, Pin: FilterPin},
   props: {
     userId: Number,
     locations: Array

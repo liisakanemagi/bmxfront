@@ -1,39 +1,65 @@
 <template>
-  <h1>Lisa sõidukoht</h1>
-  <div class="d-flex justify-content-center mt-4">
-    <form class="d-flex flex-column col-3 gap-3">
-      <AlertError :alert-error-message='alertErrorMessage' @event-alert-box-closed='resetAlertMessages'/>
-      <AlertSuccess :alert-success-message="alertSuccessMessage" @event-alert-box-closed='resetAlertMessages'/>
-      <div class="form-floating">
-        <input v-model="location.locationName" type="text" class="form-control">
-        <label>Nimi</label>
-      </div>
-      <div class="form-floating">
-        <input v-model="location.locationAddress" type="text" class="form-control">
-        <label>Aadress</label>
-      </div>
-      <div class="form-floating">
+  <div class="container text-center">
+    <h1>Lisa sõidukoht</h1>
+
+    <div class="row justify-content-center">
+      <div class="col col-6">
+        <div class="d-flex justify-content-center mt-4">
+          <form class="d-flex flex-column col-6 gap-3">
+            <AlertError :alert-error-message='alertErrorMessage' @event-alert-box-closed='resetAlertMessages'/>
+            <AlertSuccess :alert-success-message="alertSuccessMessage" @event-alert-box-closed='resetAlertMessages'/>
+            <div class="form-floating">
+              <input v-model="location.locationName" type="text" class="form-control">
+              <label>Nimi</label>
+            </div>
+            <div class="form-floating">
+              <input v-model="location.locationAddress" type="text" class="form-control">
+              <label>Aadress</label>
+            </div>
+            <div class="form-floating">
         <textarea v-model="location.locationDescription" class="form-control" placeholder="Leave a comment here"
                   id="floatingTextarea2" style="height: 100px"></textarea>
-        <label for="floatingTextarea2">Kirjeldus</label>
+              <label for="floatingTextarea2">Kirjeldus</label>
+            </div>
+            <LocationTypesDropdown :locationTypes="locationTypes" @event-new-location-type-selected="setNewLocationTypeId"/>
+            <CountyDropdown :counties="counties" @event-new-county-selected="setNewCountyId"/>
+            <div class="form-floating">
+              <input v-model="location.locationLat" type="number" class="form-control">
+              <label>Laiuskraad</label>
+            </div>
+            <div class="form-floating">
+              <input v-model="location.locationLng" type="number" class="form-control">
+              <label>Pikkuskraad</label>
+            </div>
+          </form>
+        </div>
       </div>
-      <LocationTypesDropdown :locationTypes="locationTypes" @event-new-location-type-selected="setNewLocationTypeId"/>
-      <CountyDropdown :counties="counties" @event-new-county-selected="setNewCountyId"/>
-      <div class="form-floating">
-        <input v-model="location.locationLat" type="number" class="form-control">
-        <label>Laiuskraad</label>
+      <div class="col">
+        <Map :displayClickMarker="true"
+            @event-location-selected="setLocationLatLng"
+        />
       </div>
-      <div class="form-floating">
-        <input v-model="location.locationLng" type="number" class="form-control">
-        <label>Pikkuskraad</label>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col">
+        <button @click="processAddLocation"
+                class="btn btn-secondary btn-sm" :disabled="isPostingData">
+          <span v-if="isPostingData" class="spinner-border spinner-border-sm btn-sm" aria-hidden="true"></span>
+          <span class="btn btn-secondary btn-sm">Edasi</span>
+        </button>
+
       </div>
-      <button @click="processAddLocation"
-              class="btn btn-secondary btn-sm" :disabled="isPostingData">
-        <span v-if="isPostingData" class="spinner-border spinner-border-sm btn-sm" aria-hidden="true"></span>
-        <span class="btn btn-secondary btn-sm">Edasi</span>
-      </button>
-    </form>
+
+
+    </div>
+
   </div>
+
+
+
+
+
+
 </template>
 
 <script>
@@ -45,10 +71,11 @@ import AlertSuccess from "@/components/AlertSuccess.vue";
 import LocationTypeService from "@/services/LocationTypeService";
 import CountyService from "@/services/CountyService";
 import LocationService from "@/services/LocationService";
+import Map from "@/components/map/Map.vue";
 
 export default {
   name: 'NewLocationView',
-  components: {AlertSuccess, AlertError, CountyDropdown, LocationTypesDropdown},
+  components: {Map, AlertSuccess, AlertError, CountyDropdown, LocationTypesDropdown},
   data() {
     return {
       userId: Number(sessionStorage.getItem('userId')),
@@ -127,6 +154,11 @@ export default {
       } else {
         NavigationService.navigateToErrorView()
       }
+    },
+
+    setLocationLatLng(clickCoordinates) {
+      this.location.locationLat = clickCoordinates[0]
+      this.location.locationLng = clickCoordinates[1]
     },
 
     locationNameAlreadyExists(error) {

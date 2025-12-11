@@ -1,88 +1,82 @@
 <template>
-
-
   <div style="height: 40vh;">
     <l-map
         v-model:zoom="zoom"
         :center="[58.7, 25.3]"
-        @move="log('move')"
+        @click="handleMapClick"
     >
+      <!-- Tile layer -->
       <l-tile-layer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
 
 
-      <!--  I NEED HELP. I want the marker color to come from location.typeColorCode    -->
-      <l-marker v-for="location in locations"
-                :lat-lng="[location.locationLat, location.locationLng]"
+      <!-- Click Pin Marker -->
+      <l-marker
+          v-if="displayClickMarker"
+          :lat-lng="clickCoordinates"
       >
-        <l-tooltip>
-          {{ location.locationName }}
-        </l-tooltip>
-        <l-popup>
-          <!--                <LocationInfoCard :location-info="locationInfo"/>-->
+        <l-popup :options="{ closeButton: true, autoClose: false }">
         </l-popup>
       </l-marker>
 
-
-
+      <!-- Colored circle markers -->
+      <l-circle-marker
+          v-for="location in locations"
+          :key="location.locationId"
+          :lat-lng="[location.locationLat, location.locationLng]"
+          :radius="8"
+          :fill-color="location.typeColorCode"
+          color="#000"
+      weight="1"
+      fill-opacity="0.8"
+      >
+      <l-tooltip>{{ location.locationName }}</l-tooltip>
+      <l-popup>
+        <MapCard :location="location"/>
+      </l-popup>
+      </l-circle-marker>
 
     </l-map>
   </div>
-
-
 </template>
-<script>
-import {
-  LControlLayers,
-  LIcon,
-  LMap,
-  LMarker,
-  LPolygon,
-  LPolyline,
-  LPopup,
-  LRectangle,
-  LTileLayer,
-  LTooltip,
-} from "@vue-leaflet/vue-leaflet";
 
+<script>
+import {LCircleMarker, LMap, LPopup, LTileLayer, LTooltip, LMarker} from "@vue-leaflet/vue-leaflet";
+import MapCard from "@/components/map/MapCard.vue";
 
 export default {
-  name: 'Map',
+  name: "Map",
   components: {
+    MapCard,
     LMap,
-    LIcon,
     LTileLayer,
-    LMarker,
-    LControlLayers,
+    LCircleMarker,
     LTooltip,
     LPopup,
-    LPolyline,
-    LPolygon,
-    LRectangle,
-
+    LMarker
   },
   props: {
-    locations: Array
+    displayClickMarker: {
+      type: Boolean,
+      default: false
+    },
+
+    locations: {
+      type: Array,
+      default: []
+    }
   },
   data() {
     return {
       zoom: 7,
-
-
+      clickCoordinates: [0,0],
     };
   },
   methods: {
 
-    updateDraggableMarker(event) {
-      // `event` is the Leaflet event object
-      const {lat, lng} = event.target.getLatLng();
-      this.draggableMarker.latitude = lat
-      this.draggableMarker.longitude = lng
-      console.log(`Draggable pin moved to: ${lat}, ${lng}`);
+    handleMapClick(e) {
+      this.clickCoordinates = [e.latlng.lat, e.latlng.lng]
+      this.$emit('event-location-selected', this.clickCoordinates)
     },
-
-    log(a) {
-      console.log(a);
-    },
-  },
+  }
 };
 </script>
