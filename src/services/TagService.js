@@ -1,11 +1,16 @@
 import axios from "axios"
 
 export default {
-    sendGetTagsRequest(){
+    sendGetTagsRequest() {
         return axios.get('/tags')
     },
 
-    sendPostLocationTagRequest(locationTag) {
-        return axios.post('/location/tag', locationTag)
+    sendPostLocationTagRequest(locationId, tagId) {
+        return axios.post('/location/tag', null, {
+            params: {
+                locationId: locationId,
+                tagId: tagId
+            }
+        })
     }
 }

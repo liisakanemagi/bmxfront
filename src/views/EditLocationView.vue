@@ -42,7 +42,7 @@
       <div class="d-flex align-items-center gap-3">
         <h1 class="mb-0">Tagid</h1>
         <font-awesome-icon icon="fa-solid fa-plus" style="cursor: pointer" @click="addTag"/>
-        <LocationTagDropDown :tags="tags" @event-new-locationTag-selected = "addLocationTag"/>
+        <TagsDropdown :tags="tags" @event-new-locationTag-selected = "setSelectedLocationTagId"/>
       </div>
     </form>
   </div>
@@ -64,9 +64,10 @@ import LocationImageService from "@/services/LocationImageService";
 
 export default {
   name: 'EditLocationView',
-  components: {ImageInput, LocationTagDropDown: TagsDropdown, CountyDropdown, LocationTypesDropdown, AlertSuccess, AlertError},
+  components: {ImageInput, TagsDropdown, CountyDropdown, LocationTypesDropdown, AlertSuccess, AlertError},
   data() {
     return {
+      selectedTagId:0,
       isView: true,
       locationId: Number(this.$route.params.id),
       alertErrorMessage: '',
@@ -106,7 +107,7 @@ export default {
               tagName: ''
             }
           ],
-      locationTag:
+      locationTags:
           {
             locationId: 0,
             tagId: 0,
@@ -147,12 +148,16 @@ export default {
         .catch(() => NavigationService.navigateToErrorView())
     },
 
-    // addLocationTag(){
-    //   TagService.sendPostLocationTagRequest(this.locationTag)
-    //       .then()
-    //       .catch(() => NavigationService.navigateToErrorView())
-    //
-    // },
+    setSelectedLocationTagId(selectedTagId){
+      this.selectedTagId = selectedTagId
+    },
+
+    addLocationTag(){
+      TagService.sendPostLocationTagRequest(this.locationId, this.selectedTagId)
+          .then(() => this.getLocationTags())
+          .catch(() => NavigationService.navigateToErrorView())
+
+    },
 
     handleImageSelected(imageData) {
       this.locationImage.locationId = this.locationId
@@ -160,6 +165,10 @@ export default {
       LocationImageService.sendPostLocationImageRequest(this.locationImage)
           .then()
           .catch(() => NavigationService.navigateToErrorView())
+    },
+
+    getLocationTags() {
+
     },
 
     addTag(){
@@ -172,6 +181,7 @@ export default {
     this.getLocationTypes()
     this.getCounties()
     this.getTags()
+    this.getLocationTags()
   }
 }
 </script>
