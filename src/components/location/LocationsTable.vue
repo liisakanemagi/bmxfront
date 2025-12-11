@@ -8,7 +8,7 @@
         {{ location.locationName }}, {{ location.locationAddress }}
       </div>
       <div class="col">
-        <StarRating/>
+        <StarRating :location-average-rating="location.locationAverageRating" />
         {{ location.locationAverageRating }}
       </div>
       <div class="col">
