@@ -18,12 +18,17 @@ export default {
         })
     },
 
-    sendGetLocationsRequest() {
-        return axios.get('/locations')
-    },
 
-    sendGetFilteredLocationsRequest() {
-        return axios.get('/locations/filtered')
+    sendGetFilteredLocationsRequest(userId, countyId, locationTypeIds, tagId) {
+        return axios.get('/locations/filtered', {
+            params: {
+                userId: userId,
+                countyId: countyId,
+                locationTypeIds: locationTypeIds,
+                tagId: tagId
+
+            }
+        })
     },
 
 

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export default {
-    sendGetLocationTypeRequest() {
+    sendGetLocationTypesRequest() {
         return axios.get('/location-types')
     }
 }

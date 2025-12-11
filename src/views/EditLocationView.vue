@@ -130,7 +130,7 @@ export default {
     },
 
     getLocationTypes() {
-      LocationTypeService.sendGetLocationTypeRequest()
+      LocationTypeService.sendGetLocationTypesRequest()
           .then(response => this.locationTypes = response.data)
           .catch(() => NavigationService.navigateToErrorView())
     },

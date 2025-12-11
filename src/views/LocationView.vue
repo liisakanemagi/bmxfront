@@ -1,17 +1,28 @@
 <template>
-  <h1>Sõidukohad</h1>
 
-  <div class="row d-flex justify-content-center mt-4">
-    <div class="col d-flex flex-column col-3 gap-3 justify-content-center">
-      <CountyDropdown :counties="counties" @event-new-county-selected="setNewCountyId"/>
-      <LocationTypesCheckbox/>
+  <div class="container text-center">
+    <div class="row justify-content-center mb-5">
+      <div class="col ">
+        <h1>Sõidukohad</h1>
+      </div>
     </div>
-    <div class="col">
-
+    <div class="row justify-content-center mb-5">
+      <div class="col col-4 ">
+        <LocationTypePins
+            :location-types="locationTypes"
+            @event-pin-toggled="updateLocationTypes"
+        />
+        <CountyDropdown :counties="counties" @event-new-county-selected="setSelectedCountyId"/>
+      </div>
+      <div class="col ">
+        MAP placeholder
+      </div>
     </div>
-  </div>
-  <div>
-    <LocationsTable :locations="locationsTable"/>
+    <div class="row justify-content-center mb-5">
+      <div class="col col-10 ">
+        <LocationsTable :locations="locations"/>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -21,16 +32,49 @@ import CountyService from "@/services/CountyService";
 import NavigationService from "@/services/NavigationService";
 import LocationService from "@/services/LocationService";
 import LocationsTable from "@/components/location/LocationsTable.vue";
-import LocationTypesCheckbox from "@/components/location/LocationTypesCheckbox.vue";
+import LocationTypePins from "@/components/location/LocationTypePins.vue";
 import LocationTypeService from "@/services/LocationTypeService";
+import FilterPin from "@/components/FilterPin.vue";
+import SessionStorageService from "@/services/SessionStorageService";
 
 export default {
   name: 'LocationView',
-  components: {LocationTypesCheckbox, LocationsTable, CountyDropdown},
+  components: {FilterPin, LocationTypePins, LocationsTable, CountyDropdown},
   data() {
-    return{
+    return {
+      userId: 0,
+      selectedCountyId: 0,
+      locationTypeIds: [],
 
-      filteredLocation:
+      locationTypes: [
+        {
+          locationTypeId: 0,
+          locationTypeName: '',
+          locationTypeColorCode: '',
+          isSelected: true
+        }
+      ],
+
+
+      counties: [
+        {
+          countyId: 0,
+          countyName: '',
+          zoomLevel: 0,
+          countyLng: null,
+          countyLat: null
+        }
+      ],
+
+
+      LocationTags: [
+        {
+          tagId: 0,
+          tagName: ''
+        }
+      ],
+
+      locations:
           [
             {
               locationId: 0,
@@ -44,41 +88,12 @@ export default {
             }
           ],
 
-      counties: [
-        {
-          countyId: 0,
-          countyName: '',
-          zoomLevel: 0,
-          countyLng: null,
-          countyLat: null
-        }
-      ],
-      locationsTable: [],
-
-      // See on vajalik, et getLocationTypes() meetod saaks andmed salvestada
-      locationTypes: [],
-
-      // See on vajalik, et setNewCountyId() meetod saaks korrektselt töötada
-      // Tavaliselt hoitakse siin filtrite valikuid
-      filters: {
-        countyId: null
-      },
-
-      LocationTags: [
-        {
-          tagId: 0,
-          tagName: ''
-        }
-      ],
     }
+
+
   },
 
   methods: {
-    getLocations() {
-      LocationService.sendGetLocationsRequest()
-          .then(response => this.locations = response.data)
-          .catch(() => NavigationService.navigateToErrorView())
-    },
 
     getCounties() {
       CountyService.sendGetCountiesRequest()
@@ -86,26 +101,55 @@ export default {
           .catch(() => NavigationService.navigateToErrorView())
     },
 
-    setNewCountyId(selectedCountyId) {
-      this.location.countyId = selectedCountyId
+    setSelectedCountyId(selectedCountyId) {
+      this.selectedCountyId = selectedCountyId
     },
     getLocationTypes() {
-      LocationTypeService.sendGetLocationTypeRequest()
-          .then(response => this.locationTypes = response.data)
+      LocationTypeService.sendGetLocationTypesRequest()
+          .then(response => this.handleLocationTypesResponse(response))
           .catch(() => NavigationService.navigateToErrorView())
 
     },
+
+    handleLocationTypesResponse(response) {
+      this.locationTypes = response.data
+      this.generateLocationTypeIds()
+      this.getFilteredLocations()
+    },
+
+
     getFilteredLocations() {
-      LocationService.sendGetFilteredLocationsRequest()
-          .then(response => this.filteredLocation = response.data)
+      LocationService.sendGetFilteredLocationsRequest(this.userId, this.selectedCountyId, this.locationTypeIds, 0)
+          .then(response => this.locations = response.data)
           .catch(() => NavigationService.navigateToErrorView())
     },
+
+    updateLocationTypes(locationTypeId) {
+      const item = this.locationTypes.find(
+          type => type.locationTypeId === locationTypeId
+      );
+
+        item.isSelected = !item.isSelected
+      this.generateLocationTypeIds()
+    },
+
+    generateLocationTypeIds() {
+      this.locationTypeIds = this.locationTypes
+          .filter(type => type.isSelected)
+          .map(type => type.locationTypeId);
+    }
+
   },
+
+
+
   mounted() {
-    this.getLocations()
-    this.getCounties()
+    let userIsLoggedIn = SessionStorageService.isLoggedIn()
+    if (userIsLoggedIn) {
+        this.userId = SessionStorageService.getUserId()
+    }
     this.getLocationTypes()
-    this.getFilteredLocations()
+    this.getCounties()
   }
 }
 </script>
