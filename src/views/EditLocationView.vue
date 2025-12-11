@@ -44,8 +44,11 @@
       <hr>
       <div class="d-flex align-items-center gap-3">
         <h1 class="mb-0">Tagid</h1>
-        <font-awesome-icon icon="fa-solid fa-plus" style="cursor: pointer" @click="addTag"/>
+<!--        <font-awesome-icon icon="fa-solid fa-plus" style="cursor: pointer" @click="addTag"/>-->
         <TagsDropdown :tags="tags" @event-new-locationTag-selected = "setSelectedLocationTagId"/>
+      </div>
+      <div>
+        <button @click="addLocationTag" type="button" class="btn btn-secondary btn-sm">Lisa tag</button>
       </div>
 
     </form>
@@ -157,10 +160,12 @@ export default {
     },
 
     addLocationTag(){
-      TagService.sendPostLocationTagRequest(this.locationId, this.selectedTagId)
+      this.locationTags.locationId = this.locationId
+      this.locationTags.tagId =this.selectedTagId
+      TagService.sendPostLocationTagRequest(this.locationTags)
           .then(() => this.getLocationTags())
           .catch(() => NavigationService.navigateToErrorView())
-
+        //Todo parandada tagi lisamine, vale andmevorming.
     },
 
     handleImageSelected(imageData) {
@@ -173,7 +178,7 @@ export default {
 
     addImage(){
       LocationImageService.sendPostLocationImageRequest(this.locationImage)
-          .then()
+          .then(() => this.alertSuccessMessage = 'Pilt lisatud')
           .catch(() => NavigationService.navigateToErrorView())
     },
 
@@ -181,8 +186,10 @@ export default {
 
     },
 
-    addTag(){
 
+    resetAlertMessages() {
+      this.alertSuccessMessage = ''
+      this.alertErrorMessage = ''
     },
 
   },
