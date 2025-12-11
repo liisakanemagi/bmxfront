@@ -57,14 +57,14 @@ import LocationService from "@/services/LocationService";
 import NavigationService from "@/services/NavigationService";
 import LocationTypeService from "@/services/LocationTypeService";
 import CountyService from "@/services/CountyService";
-import LocationTagDropDown from "@/components/location/LocationTagDropDown.vue";
+import TagsDropdown from "@/components/location/TagsDropdown.vue";
 import TagService from "@/services/TagService";
 import ImageInput from "@/components/Image/ImageInput.vue";
 import LocationImageService from "@/services/LocationImageService";
 
 export default {
   name: 'EditLocationView',
-  components: {ImageInput, LocationTagDropDown, CountyDropdown, LocationTypesDropdown, AlertSuccess, AlertError},
+  components: {ImageInput, LocationTagDropDown: TagsDropdown, CountyDropdown, LocationTypesDropdown, AlertSuccess, AlertError},
   data() {
     return {
       isView: true,
@@ -142,7 +142,7 @@ export default {
     },
 
     getTags(){
-    TagService.sendGetTagRequest()
+    TagService.sendGetTagsRequest()
         .then(response =>this.tags = response.data)
         .catch(() => NavigationService.navigateToErrorView())
     },

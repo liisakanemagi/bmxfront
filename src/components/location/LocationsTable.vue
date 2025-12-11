@@ -8,13 +8,15 @@
         {{ location.locationName }}, {{ location.locationAddress }}
       </div>
       <div class="col">
+        <StarRating/>
         {{ location.locationAverageRating }}
       </div>
       <div class="col">
         {{ location.locationImageData }}
       </div>
       <div v-if="isLoggedIn" class="col">
-        {{ location.isInFavourites }}
+        <font-awesome-icon @click="removeFromFavorites(location.locationId)" v-if="location.isInFavourites" icon="fa-solid fa-heart" />
+        <font-awesome-icon v-else @click="addToFavorites(location.locationId)" icon="fa-regular fa-heart" />
       </div>
     </div>
   </div>
@@ -24,17 +26,33 @@
 <script>
 import SessionStorageService from "@/services/SessionStorageService";
 import FilterPin from "@/components/FilterPin.vue";
+import StarRating from "@/components/StarRating.vue";
 
 export default {
   name: 'LocationsTable',
-  components: {Pin: FilterPin},
+  components: {StarRating, Pin: FilterPin},
   props: {
+    userId: Number,
     locations: Array
   },
   data(){
     return {
       isLoggedIn: SessionStorageService.isLoggedIn()
     }
+  },
+  methods: {
+    removeFromFavorites(locationId) {
+      // todo: saada sõnum backi. eduka then() sees emiti teade ülesse, et updateToggle
+
+      this.$emit('event-toggle-location-is-in-favourites', locationId)
+    },
+
+    addToFavorites(locationId) {
+
+      // todo: saada sõnum backi. eduka then() sees emiti teade ülesse, et updateToggle
+
+      this.$emit('event-toggle-location-is-in-favourites', locationId)
+    },
   }
 
 }

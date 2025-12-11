@@ -6,10 +6,8 @@
 </template>
 <script>
 export default {
-  name: 'LocationTagDropDown',
+  name: 'TagsDropdown',
   props: {
-
-    locationTag: Object,
     tags: Array,
     selectedTagId: {
       type: Number,
@@ -19,7 +17,7 @@ export default {
 
   methods: {
     newTagSelected(selectedTagId) {
-      this.$emit('event-new-locationTag-selected', Number(selectedTagId))
+      this.$emit('event-new-tag-selected', Number(selectedTagId))
     }
 
   }

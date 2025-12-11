@@ -10,9 +10,13 @@
       <div class="col col-4 ">
         <LocationTypePins
             :location-types="locationTypes"
-            @event-pin-toggled="updateLocationTypes"
+            @event-pin-toggled="handleUpdateLocationTypes"
         />
-        <CountyDropdown :counties="counties" @event-new-county-selected="setSelectedCountyId"/>
+        <CountyDropdown :counties="counties" @event-new-county-selected="handleSelectedCountyId"/>
+        <TagsDropdown :tags="tags"
+                      @event-new-tag-selected="handleSelectedTagId"
+        />
+
       </div>
       <div class="col ">
         MAP placeholder
@@ -20,7 +24,9 @@
     </div>
     <div class="row justify-content-center mb-5">
       <div class="col col-10 ">
-        <LocationsTable :locations="locations"/>
+        <LocationsTable :locations="locations" :user-id="userId"
+          @event-toggle-location-is-in-favourites="handleLocationIsInFavouritesToggle"
+        />
       </div>
     </div>
   </div>
@@ -36,14 +42,17 @@ import LocationTypePins from "@/components/location/LocationTypePins.vue";
 import LocationTypeService from "@/services/LocationTypeService";
 import FilterPin from "@/components/FilterPin.vue";
 import SessionStorageService from "@/services/SessionStorageService";
+import TagsDropdown from "@/components/location/TagsDropdown.vue";
+import TagService from "@/services/TagService";
 
 export default {
   name: 'LocationView',
-  components: {FilterPin, LocationTypePins, LocationsTable, CountyDropdown},
+  components: {TagsDropdown, FilterPin, LocationTypePins, LocationsTable, CountyDropdown},
   data() {
     return {
       userId: 0,
       selectedCountyId: 0,
+      selectedTagId: 0,
       locationTypeIds: [],
 
       locationTypes: [
@@ -67,7 +76,7 @@ export default {
       ],
 
 
-      LocationTags: [
+      tags: [
         {
           tagId: 0,
           tagName: ''
@@ -101,9 +110,22 @@ export default {
           .catch(() => NavigationService.navigateToErrorView())
     },
 
-    setSelectedCountyId(selectedCountyId) {
-      this.selectedCountyId = selectedCountyId
+    getTags() {
+      TagService.sendGetTagsRequest()
+          .then(response => this.tags = response.data)
+          .catch()
     },
+
+    handleSelectedCountyId(selectedCountyId) {
+      this.selectedCountyId = selectedCountyId
+      this.getFilteredLocations()
+    },
+
+    handleSelectedTagId(selectedTagId) {
+      this.selectedTagId = selectedTagId
+      this.getFilteredLocations()
+    },
+
     getLocationTypes() {
       LocationTypeService.sendGetLocationTypesRequest()
           .then(response => this.handleLocationTypesResponse(response))
@@ -119,18 +141,27 @@ export default {
 
 
     getFilteredLocations() {
-      LocationService.sendGetFilteredLocationsRequest(this.userId, this.selectedCountyId, this.locationTypeIds, 0)
+      LocationService.sendGetFilteredLocationsRequest(this.userId, this.selectedCountyId, this.locationTypeIds, this.selectedTagId)
           .then(response => this.locations = response.data)
           .catch(() => NavigationService.navigateToErrorView())
     },
 
-    updateLocationTypes(locationTypeId) {
+    handleUpdateLocationTypes(locationTypeId) {
       const item = this.locationTypes.find(
           type => type.locationTypeId === locationTypeId
       );
 
-        item.isSelected = !item.isSelected
+      item.isSelected = !item.isSelected
       this.generateLocationTypeIds()
+      this.getFilteredLocations()
+    },
+
+    handleLocationIsInFavouritesToggle(locationId) {
+      const location = this.locations.find(
+          location => location.locationId === locationId
+      );
+
+      location.isInFavourites = !location.isInFavourites
     },
 
     generateLocationTypeIds() {
@@ -142,14 +173,14 @@ export default {
   },
 
 
-
   mounted() {
     let userIsLoggedIn = SessionStorageService.isLoggedIn()
     if (userIsLoggedIn) {
-        this.userId = SessionStorageService.getUserId()
+      this.userId = SessionStorageService.getUserId()
     }
     this.getLocationTypes()
     this.getCounties()
+    this.getTags()
   }
 }
 </script>
