@@ -18,8 +18,8 @@
         />
 
       </div>
-      <div class="col ">
-        MAP placeholder
+      <div class="col col-6">
+        <Map :locations="locations"/>
       </div>
     </div>
     <div class="row justify-content-center mb-5">
@@ -44,10 +44,11 @@ import FilterPin from "@/components/FilterPin.vue";
 import SessionStorageService from "@/services/SessionStorageService";
 import TagsDropdown from "@/components/location/TagsDropdown.vue";
 import TagService from "@/services/TagService";
+import Map from "@/components/map/Map.vue";
 
 export default {
   name: 'LocationView',
-  components: {TagsDropdown, FilterPin, LocationTypePins, LocationsTable, CountyDropdown},
+  components: {Map, TagsDropdown, FilterPin, LocationTypePins, LocationsTable, CountyDropdown},
   data() {
     return {
       userId: 0,
@@ -89,6 +90,8 @@ export default {
               locationId: 0,
               locationName: '',
               locationAverageRating: 0,
+              locationLat: '',
+              locationLng: '',
               locationAddress: '',
               typeColorCode: '',
               countyName: '',

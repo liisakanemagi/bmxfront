@@ -1,7 +1,7 @@
 <template>
   <h1>Lisa sõidukoht</h1>
   <div class="d-flex justify-content-center mt-4">
-    <form @submit="processAddLocation" class="d-flex flex-column col-3 gap-3">
+    <form class="d-flex flex-column col-3 gap-3">
       <AlertError :alert-error-message='alertErrorMessage' @event-alert-box-closed='resetAlertMessages'/>
       <AlertSuccess :alert-success-message="alertSuccessMessage" @event-alert-box-closed='resetAlertMessages'/>
       <div class="form-floating">
@@ -20,14 +20,14 @@
       <LocationTypesDropdown :locationTypes="locationTypes" @event-new-location-type-selected="setNewLocationTypeId"/>
       <CountyDropdown :counties="counties" @event-new-county-selected="setNewCountyId"/>
       <div class="form-floating">
-        <input v-model="location.locationLat" type="number" class="form-control" min="-90" max="90">
+        <input v-model="location.locationLat" type="number" class="form-control">
         <label>Laiuskraad</label>
       </div>
       <div class="form-floating">
-        <input v-model="location.locationLng" type="number" class="form-control" min="-180" max="180">
+        <input v-model="location.locationLng" type="number" class="form-control">
         <label>Pikkuskraad</label>
       </div>
-      <button
+      <button @click="processAddLocation"
               class="btn btn-secondary btn-sm" :disabled="isPostingData">
         <span v-if="isPostingData" class="spinner-border spinner-border-sm btn-sm" aria-hidden="true"></span>
         <span class="btn btn-secondary btn-sm">Edasi</span>
@@ -90,8 +90,7 @@ export default {
     }
   },
   methods: {
-    processAddLocation(e) {
-      e.preventDefault()
+    processAddLocation() {
       this.handleInputErrorMessages();
       if (this.allFieldsHaveCorrectInput())
         this.executeAddLocation();
