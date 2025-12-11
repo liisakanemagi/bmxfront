@@ -38,12 +38,16 @@
         <h1 class="mb-0">Pildid</h1>
         <ImageInput ref="imageInput" @event-new-image-selected = "handleImageSelected"/>
       </div>
+      <div>
+        <button @click="addImage" type="button" class="btn btn-secondary btn-sm">Lisa pilt</button>
+      </div>
       <hr>
       <div class="d-flex align-items-center gap-3">
         <h1 class="mb-0">Tagid</h1>
         <font-awesome-icon icon="fa-solid fa-plus" style="cursor: pointer" @click="addTag"/>
         <TagsDropdown :tags="tags" @event-new-locationTag-selected = "setSelectedLocationTagId"/>
       </div>
+
     </form>
   </div>
 </template>
@@ -162,6 +166,12 @@ export default {
     handleImageSelected(imageData) {
       this.locationImage.locationId = this.locationId
       this.locationImage.locationImageData = imageData
+
+
+
+    },
+
+    addImage(){
       LocationImageService.sendPostLocationImageRequest(this.locationImage)
           .then()
           .catch(() => NavigationService.navigateToErrorView())
