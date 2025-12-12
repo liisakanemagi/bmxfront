@@ -170,7 +170,7 @@ export default {
 
     addLocationTag() {
       TagService.sendPostLocationTagRequest(this.locationId, this.selectedTagId)
-          .then(() => this.getLocationTags())
+          .then(() => this.alertSuccessMessage = 'Tag Lisatud')
           .catch(() => NavigationService.navigateToErrorView())
     },
 
