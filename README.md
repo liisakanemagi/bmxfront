@@ -12,7 +12,7 @@ This repository contains the frontend application for a BMX Estonia community pa
 
 ### What Works
 * **Interactive Map (Leaflet):** Publicly accessible map of riding spots with filtering by tags, spot types, and counties. Markers are color-coded by type, and spot details are available via a list or by clicking map pins.
-* **Add New Spots:** Logged-in users can submit new riding spots via a form, including image upload functionality. Coordinates can be picked directly by clicking on the map (auto-filling latitude/longitude fields), and image upload is supported.
+* **Add New Spots:** Logged-in users can submit new riding spots via a form, including image upload functionality. Coordinates can be picked directly by clicking on the map (auto-filling latitude/longitude fields).
 * **User Authentication:** Login and Register functionality *(Note: Simplified for educational purposes, no encryption implemented)*.
 
 ### Known Issues (Currently fixing)
