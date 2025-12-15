@@ -32,16 +32,16 @@ This repository contains the frontend application for a BMX Estonia community pa
 
 ## Tech Stack
 **Frontend:**
-* **Vue.js** - Main frontend framework
-* **JavaScript** - Application logic
-* **HTML & CSS** - Structure and styling
+* **Vue.js** 
+* **JavaScript** 
+* **HTML & CSS** 
 * **Leaflet.js** - Interactive map integration
 
 **Backend:**
-* **Java** - Primary programming language
-* **Spring Boot** - Backend framework
-* **RESTful API** - Client-server communication architecture
-
+* **Java** 
+* **Spring Boot** 
+* **RESTful API**
+* 
 **Database:**
 * **SQL** (PostgreSQL) - Database management
 
