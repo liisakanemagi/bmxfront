@@ -43,8 +43,8 @@ This repository contains the frontend application for a BMX Estonia community pa
 * **RESTful API**
   
 **Database:**
-* **SQL** (PostgreSQL) - Database management
-
+* **SQL** (PostgreSQL)
+* 
 ## Project setup 
 ```
 npm install
