@@ -1,4 +1,4 @@
-<template>
++<template>
   <div>
   <h4>Sõidukoha tüübid:
   </h4>

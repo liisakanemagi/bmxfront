@@ -28,6 +28,8 @@ import SessionStorageService from "@/services/SessionStorageService";
 import FilterPin from "@/components/FilterPin.vue";
 import StarRating from "@/components/StarRating.vue";
 import LocationImage from "@/components/map/LocationImage.vue";
+import favoriteLocationService from "@/services/FavoriteLocationService";
+import NavigationService from "@/services/NavigationService";
 
 export default {
   name: 'LocationsTable',
@@ -35,6 +37,7 @@ export default {
   props: {
     userId: Number,
     locations: Array
+
   },
   data(){
     return {
@@ -42,17 +45,16 @@ export default {
     }
   },
   methods: {
-    removeFromFavorites(locationId) {
-      // todo: saada sõnum backi. eduka then() sees emiti teade ülesse, et updateToggle
-
-      this.$emit('event-toggle-location-is-in-favourites', locationId)
-    },
+    // removeFromFavorites(locationId) {
+    //   // todo: saada sõnum backi. eduka then() sees emiti teade ülesse, et updateToggle
+    //
+    //   this.$emit('event-toggle-location-is-in-favourites',locationId)
+    // },
 
     addToFavorites(locationId) {
-
-      // todo: saada sõnum backi. eduka then() sees emiti teade ülesse, et updateToggle
-
-      this.$emit('event-toggle-location-is-in-favourites', locationId)
+      favoriteLocationService.sendPostFavouriteLocationRequest(this.userId, locationId)
+          .then(() => {this.$emit('event-toggle-location-is-in-favourites', locationId, this.userId)})
+          .catch(() => NavigationService.navigateToErrorView())
     },
   }
 
