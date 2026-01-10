@@ -25,7 +25,7 @@
     <div class="row justify-content-center mb-5">
       <div class="col col-10 ">
         <LocationsTable :locations="locations" :user-id="userId"
-          @event-toggle-location-is-in-favourites="handleLocationIsInFavouritesToggle"
+                        @event-toggle-location-is-in-favourites="handleLocationIsInFavouritesToggle"
         />
       </div>
     </div>
@@ -174,7 +174,6 @@ export default {
     }
 
   },
-
 
   mounted() {
     let userIsLoggedIn = SessionStorageService.isLoggedIn()

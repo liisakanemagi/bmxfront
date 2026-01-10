@@ -8,5 +8,15 @@ export default {
                 locationId: locationId,
             }
         })
+    },
+
+    sendDeleteFavoriteLocationRequest(userId, locationId){
+        return axios.delete("/favorite/location",{
+            params:{
+                userId: userId,
+                locationId: locationId
+            }
+        })
     }
+
 }

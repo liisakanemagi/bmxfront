@@ -30,6 +30,7 @@ import StarRating from "@/components/StarRating.vue";
 import LocationImage from "@/components/map/LocationImage.vue";
 import favoriteLocationService from "@/services/FavoriteLocationService";
 import NavigationService from "@/services/NavigationService";
+import FavoriteLocationService from "@/services/FavoriteLocationService";
 
 export default {
   name: 'LocationsTable',
@@ -45,11 +46,11 @@ export default {
     }
   },
   methods: {
-    // removeFromFavorites(locationId) {
-    //   // todo: saada sõnum backi. eduka then() sees emiti teade ülesse, et updateToggle
-    //
-    //   this.$emit('event-toggle-location-is-in-favourites',locationId)
-    // },
+    removeFromFavorites(locationId) {
+     FavoriteLocationService.sendDeleteFavoriteLocationRequest(this.userId, locationId)
+         .then(() => this.$emit('event-toggle-location-is-in-favourites',locationId))
+         .catch(() => NavigationService.navigateToErrorView())
+    },
 
     addToFavorites(locationId) {
       favoriteLocationService.sendPostFavouriteLocationRequest(this.userId, locationId)
