@@ -14,9 +14,10 @@ This repository contains the frontend application for a BMX Estonia community pa
 * **Interactive Map (Leaflet):** Publicly accessible map of riding spots with filtering by tags, spot types, and counties. Markers are color-coded by type, and spot details are available via a list or by clicking map pins.
 * **Add New Spots:** Logged-in users can submit new riding spots via a form, including image upload functionality. Coordinates can be picked directly by clicking on the map (auto-filling latitude/longitude fields).
 * **User Authentication:** Login and Register functionality *(Note: Simplified for educational purposes, no encryption implemented)*.
+* **Favorites System:** Logged-in users can add locations to their personal favorites list or remove them by toggling the heart icon.
 
 ### Known Issues (Currently fixing)
-* **Data Persistence:** "Add to Favorites" currently works in the frontend state only; saving to the database is in progress.
+
 * **Missing Seed Images:** The initial database script does not yet contain the image data for the pre-filled locations (these assets are currently local-only). As a result, the frontend falls back to a default placeholder image for these spots. *Note: The upload functionality for new user-submitted spots works.*
 * **Form Reset Logic:** The image upload input currently does not automatically clear after selection, allowing the same image to be added multiple times (duplicate verification is pending).
 * **UI Inconsistency:** Location pins in the location list are displayed in gray; they need to be updated to match the color-coding logic of the map markers.
