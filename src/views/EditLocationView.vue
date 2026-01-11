@@ -1,6 +1,6 @@
 <template>
   <h1>{{ location.locationName }}</h1>
-  <font-awesome-icon icon="fa-solid fa-pen-to-square" />
+  <font-awesome-icon icon="fa-solid fa-pen-to-square"/>
   <div class="d-flex justify-content-center mt-4">
     <form class="d-flex flex-column col-3 gap-3">
       <AlertError :alert-error-message='alertErrorMessage' @event-alert-box-closed='resetAlertMessages'/>
@@ -36,7 +36,8 @@
       <hr>
       <div class="d-flex align-items-center gap-3">
         <h1 class="mb-0">Pildid</h1>
-        <ImageInput ref="imageInput" @event-new-image-selected = "handleImageSelected"/>
+        <ImageInput ref="imageInput" @event-new-image-selected="handleImageSelected"
+                    @event-chosen-image-cleared="clearImage"/>
       </div>
       <div>
         <button @click="addImage" type="button" class="btn btn-secondary btn-sm">Lisa pilt</button>
@@ -44,8 +45,8 @@
       <hr>
       <div class="d-flex align-items-center gap-3">
         <h1 class="mb-0">Tagid</h1>
-<!--        <font-awesome-icon icon="fa-solid fa-plus" style="cursor: pointer" @click="addTag"/>-->
-        <TagsDropdown :tags="tags" @event-new-tag-selected = "setSelectedLocationTagId"/>
+        <!--        <font-awesome-icon icon="fa-solid fa-plus" style="cursor: pointer" @click="addTag"/>-->
+        <TagsDropdown :tags="tags" @event-new-tag-selected="setSelectedLocationTagId"/>
       </div>
       <div>
         <button @click="addLocationTag" type="button" class="btn btn-secondary btn-sm">Lisa tag</button>
@@ -74,7 +75,7 @@ export default {
   components: {ImageInput, TagsDropdown, CountyDropdown, LocationTypesDropdown, AlertSuccess, AlertError},
   data() {
     return {
-      selectedTagId:0,
+      selectedTagId: 0,
       isView: true,
       locationId: Number(this.$route.params.id),
       alertErrorMessage: '',
@@ -110,7 +111,7 @@ export default {
       tags:
           [
             {
-              tagId:0,
+              tagId: 0,
               tagName: ''
             }
           ],
@@ -122,10 +123,10 @@ export default {
           },
 
       locationImage:
-    {
-      locationId: 0,
-      locationImageData: ''
-    }
+          {
+            locationId: 0,
+            locationImageData: ''
+          }
 
     }
   },
@@ -149,12 +150,11 @@ export default {
           .catch(() => NavigationService.navigateToErrorView())
     },
 
-    getTags(){
-    TagService.sendGetTagsRequest()
-        .then(response =>this.tags = response.data)
-        .catch(() => NavigationService.navigateToErrorView())
+    getTags() {
+      TagService.sendGetTagsRequest()
+          .then(response => this.tags = response.data)
+          .catch(() => NavigationService.navigateToErrorView())
     },
-
 
 
     setSelectedLocationTagId(tagId) {
@@ -178,14 +178,19 @@ export default {
       this.locationImage.locationId = this.locationId
       this.locationImage.locationImageData = imageData
 
-
-
     },
 
-    addImage(){
+    clearImage() {
+      this.locationImage.locationImageData = ''
+    },
+
+    addImage() {
       LocationImageService.sendPostLocationImageRequest(this.locationImage)
           .then(() => this.alertSuccessMessage = 'Pilt lisatud')
           .catch(() => NavigationService.navigateToErrorView())
+          .finally(() => {
+            this.$refs.imageInput.clearFileInput()
+          })
     },
 
     // getLocationTags() {
@@ -196,9 +201,9 @@ export default {
     resetAlertMessages() {
       this.alertSuccessMessage = ''
       this.alertErrorMessage = ''
-    },
-
+    }
   },
+
   mounted() {
     this.getLocation()
     this.getLocationTypes()
@@ -207,4 +212,5 @@ export default {
     // this.getLocationTags()
   }
 }
+
 </script>
