@@ -2,7 +2,7 @@
   <div class="container text-center">
     <div v-for="location in locations" :key="location.locationId" class="row">
       <div class="col">
-        <Pin :color-code="location.typeColorCode" :location-type-name="location.locationTypeName"/>
+        <Pin :is-selected="true" :color-code="location.typeColorCode" :location-type-name="location.locationTypeName"/>
       </div>
       <div class="col">
         {{ location.locationName }}, {{ location.locationAddress }}
