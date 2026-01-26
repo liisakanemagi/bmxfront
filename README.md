@@ -18,7 +18,6 @@ This repository contains the frontend application for a BMX Estonia community pa
 
 ### Known Issues (Currently fixing)
 
-* **Missing Seed Images:** The initial database script does not yet contain the image data for the pre-filled locations (these assets are currently local-only). As a result, the frontend falls back to a default placeholder image for these spots. *Note: The upload functionality for new user-submitted spots works.*
 * **Styling:** General CSS refactoring is needed for better visual polish.
 
 ### Future Roadmap & To-Do
